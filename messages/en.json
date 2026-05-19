@@ -1,0 +1,115 @@
+{
+  "brand": {
+    "name": "Math Guide",
+    "tagline": "Georgian math companion"
+  },
+  "nav": {
+    "books": "Books",
+    "problems": "Problems",
+    "tutors": "Tutors",
+    "pricing": "Pricing",
+    "chat": "AI Chat",
+    "dashboard": "Dashboard",
+    "login": "Log in",
+    "register": "Sign up",
+    "logout": "Log out"
+  },
+  "landing": {
+    "heroTitle": "Every math problem from your Georgian textbook, solved.",
+    "heroSubtitle": "School-book solutions, AI step-by-step help, and live tutors — in one place.",
+    "ctaPrimary": "Start free",
+    "ctaSecondary": "Learn more",
+    "features": {
+      "title": "What you get",
+      "library": {
+        "title": "Full library",
+        "desc": "Every chapter of the Georgian curriculum, organized by book and problem number."
+      },
+      "ai": {
+        "title": "AI explanations",
+        "desc": "Llama 3.3 walks you through the reasoning. It guides, never just hands you the answer."
+      },
+      "tutors": {
+        "title": "Live tutors",
+        "desc": "Book vetted teachers by the hour with one-tap GE payment."
+      },
+      "community": {
+        "title": "Community",
+        "desc": "Upload your own problems and share solutions with peers."
+      }
+    }
+  },
+  "pricing": {
+    "title": "Simple pricing",
+    "subtitle": "Pick the plan that fits",
+    "monthly": "per month",
+    "hourly": "per hour",
+    "cta": "Choose",
+    "plans": {
+      "free": {
+        "name": "Free",
+        "desc": "Library + community",
+        "features": [
+          "Full access to all problems",
+          "Read all solutions",
+          "Upload and comment"
+        ]
+      },
+      "ai": {
+        "name": "AI Pro",
+        "desc": "Unlimited AI explanations",
+        "features": [
+          "AI chat on any problem",
+          "Step-by-step guidance",
+          "1500 messages / month"
+        ]
+      },
+      "tutor": {
+        "name": "Tutor",
+        "desc": "Live sessions with teachers",
+        "features": [
+          "Vetted professionals",
+          "Video call link included",
+          "Pay only for hours used"
+        ]
+      }
+    }
+  },
+  "problem": {
+    "uploadTitle": "Upload a problem",
+    "statement": "Statement",
+    "solution": "Solution",
+    "preview": "Preview",
+    "submit": "Publish",
+    "askAI": "Ask AI",
+    "uploadImage": "Drop image",
+    "writeStatement": "Write the problem in LaTeX / Markdown",
+    "writeSolution": "Write your solution"
+  },
+  "auth": {
+    "loginTitle": "Log in",
+    "registerTitle": "Create an account",
+    "email": "Email",
+    "password": "Password",
+    "name": "Name",
+    "submit": "Continue",
+    "noAccount": "No account yet?",
+    "hasAccount": "Already have an account?"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "myUploads": "My uploads",
+    "subscription": "Subscription",
+    "bookings": "Bookings",
+    "chats": "Chats"
+  },
+  "common": {
+    "loading": "Loading...",
+    "empty": "Nothing here",
+    "search": "Search",
+    "grade": "Grade",
+    "chapter": "Chapter",
+    "problemNumber": "Problem #",
+    "viewAll": "View all"
+  }
+}
