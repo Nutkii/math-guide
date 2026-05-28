@@ -94,7 +94,11 @@
     "name": "სახელი",
     "submit": "გაგრძელება",
     "noAccount": "არ გაქვს ანგარიში?",
-    "hasAccount": "უკვე გაქვს ანგარიში?"
+    "hasAccount": "უკვე გაქვს ანგარიში?",
+    "errInvalidCredentials": "ელფოსტა ან პაროლი არასწორია",
+    "errEmailTaken": "ეს ელფოსტა უკვე დარეგისტრირებულია",
+    "errRegistrationFailed": "რეგისტრაცია ვერ მოხერხდა. კიდევ სცადე.",
+    "errServerError": "შეცდომა მოხდა. გთხოვთ, კიდევ სცადოთ."
   },
   "dashboard": {
     "title": "კაბინეტი",

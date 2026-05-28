@@ -1,15 +1,51 @@
 "use client";
 
+import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { toast } from "sonner";
-import { Link } from "@/i18n/routing";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { signIn } from "next-auth/react";
+import { Link, useRouter } from "@/i18n/routing";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { loginSchema, type LoginInput } from "@/lib/validations/auth";
 
 export default function LoginPage() {
   const t = useTranslations("auth");
+  const tn = useTranslations("nav");
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [serverError, setServerError] = useState("");
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginInput>({ resolver: zodResolver(loginSchema) });
+
+  async function onSubmit(data: LoginInput) {
+    setLoading(true);
+    setServerError("");
+    try {
+      const result = await signIn("credentials", {
+        email: data.email,
+        password: data.password,
+        redirect: false,
+      });
+      if (result?.error) {
+        setServerError(t("errInvalidCredentials"));
+      } else {
+        router.push("/dashboard");
+        router.refresh();
+      }
+    } catch {
+      setServerError(t("errServerError"));
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <div className="container flex min-h-[calc(100vh-160px)] items-center justify-center py-12">
@@ -20,29 +56,44 @@ export default function LoginPage() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <form
-            className="space-y-4"
-            onSubmit={(e) => {
-              e.preventDefault();
-              toast.info("Auth lands in Phase 3");
-            }}
-          >
+          <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
             <div className="space-y-2">
               <Label htmlFor="email">{t("email")}</Label>
-              <Input id="email" type="email" placeholder="you@example.com" />
+              <Input
+                id="email"
+                type="email"
+                placeholder="you@example.com"
+                {...register("email")}
+              />
+              {errors.email && (
+                <p className="text-sm text-destructive">{errors.email.message}</p>
+              )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="password">{t("password")}</Label>
-              <Input id="password" type="password" />
+              <Input id="password" type="password" {...register("password")} />
+              {errors.password && (
+                <p className="text-sm text-destructive">{errors.password.message}</p>
+              )}
             </div>
-            <Button type="submit" variant="cool" className="w-full">
-              {t("submit")}
+            {serverError && (
+              <p className="rounded-md bg-destructive/10 px-3 py-2 text-sm text-destructive">
+                {serverError}
+              </p>
+            )}
+            <Button
+              type="submit"
+              variant="cool"
+              className="w-full"
+              disabled={loading}
+            >
+              {loading ? "..." : t("submit")}
             </Button>
           </form>
           <p className="mt-6 text-center text-sm text-muted-foreground">
             {t("noAccount")}{" "}
             <Link href="/register" className="text-primary hover:underline">
-              {t("submit")}
+              {tn("register")}
             </Link>
           </p>
         </CardContent>

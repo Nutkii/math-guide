@@ -4,6 +4,7 @@ import { getMessages, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { ThemeProvider } from "@/components/layout/theme-provider";
+import { Providers } from "@/components/layout/providers";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { Toaster } from "sonner";
@@ -38,22 +39,24 @@ export default async function LocaleLayout({
   return (
     <html lang={locale} suppressHydrationWarning>
       <body className="min-h-screen bg-background font-sans antialiased">
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <NextIntlClientProvider messages={messages}>
-            <div className="relative flex min-h-screen flex-col">
-              <div className="pointer-events-none fixed inset-0 -z-10 bg-cool-mesh" />
-              <Header />
-              <main className="flex-1">{children}</main>
-              <Footer />
-            </div>
-            <Toaster richColors position="top-right" />
-          </NextIntlClientProvider>
-        </ThemeProvider>
+        <Providers>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <NextIntlClientProvider messages={messages}>
+              <div className="relative flex min-h-screen flex-col">
+                <div className="pointer-events-none fixed inset-0 -z-10 bg-cool-mesh" />
+                <Header />
+                <main className="flex-1">{children}</main>
+                <Footer />
+              </div>
+              <Toaster richColors position="top-right" />
+            </NextIntlClientProvider>
+          </ThemeProvider>
+        </Providers>
       </body>
     </html>
   );

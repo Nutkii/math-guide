@@ -94,7 +94,11 @@
     "name": "Name",
     "submit": "Continue",
     "noAccount": "No account yet?",
-    "hasAccount": "Already have an account?"
+    "hasAccount": "Already have an account?",
+    "errInvalidCredentials": "Invalid email or password",
+    "errEmailTaken": "Email already registered",
+    "errRegistrationFailed": "Registration failed. Please try again.",
+    "errServerError": "Something went wrong. Please try again."
   },
   "dashboard": {
     "title": "Dashboard",

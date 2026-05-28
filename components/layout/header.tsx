@@ -1,12 +1,14 @@
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import { Sigma } from "lucide-react";
 import { Link } from "@/i18n/routing";
 import { Button } from "@/components/ui/button";
 import { LocaleSwitcher } from "./locale-switcher";
 import { ThemeToggle } from "./theme-toggle";
+import { auth, signOut } from "@/auth";
 
-export function Header() {
-  const t = useTranslations("nav");
+export async function Header() {
+  const t = await getTranslations("nav");
+  const session = await auth();
 
   const links = [
     { href: "/books", label: t("books") },
@@ -14,6 +16,11 @@ export function Header() {
     { href: "/tutors", label: t("tutors") },
     { href: "/pricing", label: t("pricing") },
   ] as const;
+
+  async function handleSignOut() {
+    "use server";
+    await signOut({ redirectTo: "/" });
+  }
 
   return (
     <header className="sticky top-0 z-40 border-b border-border/40 bg-background/70 backdrop-blur-xl">
@@ -39,12 +46,27 @@ export function Header() {
         <div className="ml-auto flex items-center gap-1.5">
           <LocaleSwitcher />
           <ThemeToggle />
-          <Button asChild variant="ghost" size="sm" className="hidden sm:flex">
-            <Link href="/login">{t("login")}</Link>
-          </Button>
-          <Button asChild variant="cool" size="sm">
-            <Link href="/register">{t("register")}</Link>
-          </Button>
+          {session?.user ? (
+            <>
+              <Button asChild variant="ghost" size="sm" className="hidden sm:flex">
+                <Link href="/dashboard">{session.user.name ?? t("dashboard")}</Link>
+              </Button>
+              <form action={handleSignOut}>
+                <Button type="submit" variant="ghost" size="sm">
+                  {t("logout")}
+                </Button>
+              </form>
+            </>
+          ) : (
+            <>
+              <Button asChild variant="ghost" size="sm" className="hidden sm:flex">
+                <Link href="/login">{t("login")}</Link>
+              </Button>
+              <Button asChild variant="cool" size="sm">
+                <Link href="/register">{t("register")}</Link>
+              </Button>
+            </>
+          )}
         </div>
       </div>
     </header>

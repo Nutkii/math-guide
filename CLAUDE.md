@@ -1,13 +1,69 @@
-# Math Guide — Claude Progress Tracker
+# CLAUDE.md
 
-Georgian math textbook solutions platform. Full plan in [plan.md](./plan.md).
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Commands
+
+```bash
+npm run dev       # dev server (localhost:3000)
+npm run build     # production build
+npm run lint      # ESLint
+npm run seed      # seed MongoDB (requires MONGODB_URI in .env.local)
+```
+
+Run seed: `npm run seed` invokes `tsx --env-file=.env.local scripts/seed.ts`.
+
+## Architecture
+
+### Route Structure
+All pages live under `app/[locale]/` — next-intl wraps every route in a locale segment. `localePrefix: "as-needed"` means `ka` (default) has no URL prefix (`/books`), `en` uses `/en/books`.
+
+### Middleware Split (Edge-safe pattern)
+`auth.config.ts` — Edge-safe config (no Mongoose/bcrypt imports). Used in `middleware.ts`.
+`auth.ts` — Full NextAuth config with Credentials provider + MongoDB user lookup. Import in server components and API routes only.
+
+`middleware.ts` composes both: NextAuth auth check runs first (via `authConfig`), then next-intl handles locale routing.
+
+The `authorized()` callback in `auth.config.ts` strips locale prefix before checking protected paths (`/dashboard`, `/chat`, `/problems/new`).
+
+### Path Alias
+`@/` maps to project root. Use for all internal imports.
+
+### Mongoose Singleton
+`lib/db.ts` caches connection in `global._mongoose` to survive Next.js hot-reload. Always call `await connectDB()` before any model query in API routes.
+
+### Session + Types
+`types/next-auth.d.ts` augments `Session`, `User`, and `JWT` with `role: "student" | "tutor" | "admin"`. JWT stores `id` + `role`; session callback copies them to `session.user`.
+
+### i18n
+Translation files: `messages/ka.json` + `messages/en.json`. Config: `i18n/routing.ts` (locales/defaultLocale) and `i18n/request.ts` (loads message file per request).
+
+### Validation
+Zod schemas in `lib/validations/` — `auth.ts` exports `loginSchema`, `problem.ts` exports problem schema. API routes + auth use these for input parsing.
+
+### Utilities
+`lib/utils.ts` exports `cn()` — Tailwind class merge helper (`clsx` + `tailwind-merge`). Use for all conditional className logic.
+
+### Providers
+`components/layout/providers.tsx` wraps the app with `SessionProvider` (NextAuth). Rendered inside `app/[locale]/layout.tsx`.
+
+### Adding shadcn Components
+```bash
+npx shadcn@latest add <component>
+```
+Config in `components.json`. Outputs to `components/ui/`.
+
+### Adding Protected Routes
+Update the path list in `auth.config.ts` → `authorized()` callback. That function strips locale prefix before matching, so use bare paths (e.g. `/admin`, not `/en/admin`).
+
+---
 
 ## Stack
 
-- Next.js 15 (App Router) + TypeScript
+- Next.js 15 + React 19 (App Router) + TypeScript
 - Tailwind CSS v3 + shadcn/ui (manual primitives)
 - MongoDB Atlas + Mongoose (Phase 2+)
-- NextAuth.js v5 (Phase 3)
+- NextAuth.js v5 beta — `next-auth@beta`
 - Groq API — Llama 3.3 70B (Phase 4)
 - TBC + BOG payments (Phase 5)
 - next-intl v4 — `ka` default, `en` secondary
@@ -30,32 +86,30 @@ All pages built with mock data. Cool teal/cyan/emerald theme, dark mode, ka/en i
 
 ---
 
-### ⬜ Phase 2 — Backend + Mongoose
-**Status: NOT STARTED**
+### 🔶 Phase 2 — Backend + Mongoose
+**Status: IN PROGRESS**
 
-Goal: real data layer, CRUD APIs, file uploads.
-
-- [ ] MongoDB Atlas cluster + `lib/db.ts` singleton
-- [ ] Models: User, Book, Chapter, Problem, Solution, TutorProfile, Subscription, Booking, Payment
-- [ ] API routes: `/api/books`, `/api/problems`, `/api/solutions`, `/api/tutors`
+- [x] MongoDB Atlas cluster + `lib/db.ts` singleton
+- [x] Models: User, Book, Chapter, Problem, Solution, TutorProfile, Subscription, Booking, Payment (`models/`)
+- [x] API routes: `/api/books`, `/api/problems`, `/api/solutions`, `/api/tutors`
+- [x] Shared zod schemas in `lib/validations/`
+- [x] Seed script `scripts/seed.ts`
 - [ ] File uploads (UploadThing or R2 presigned)
-- [ ] Shared zod schemas in `lib/validations/`
-- [ ] Seed script `scripts/seed.ts`
-- [ ] Wire all pages to real data (replace mock imports)
+- [ ] Wire all pages to real data (replace `lib/mock-data.ts` imports)
 
 ---
 
-### ⬜ Phase 3 — Auth Module
-**Status: NOT STARTED**
+### 🔶 Phase 3 — Auth Module
+**Status: IN PROGRESS**
 
-Goal: real users, role gating.
-
-- [ ] `next-auth@beta` + `@auth/mongodb-adapter` + `bcryptjs`
-- [ ] Credentials provider + Google OAuth
-- [ ] JWT session with role + locale
-- [ ] `middleware.ts` protect `/dashboard`, `/chat`, `/problems/new`
-- [ ] Register API route
-- [ ] Role guards: `student | tutor | admin`
+- [x] `next-auth@beta` + `bcryptjs`
+- [x] Credentials provider (`auth.ts`)
+- [x] JWT session with role + locale (`auth.config.ts`, `types/next-auth.d.ts`)
+- [x] `middleware.ts` protects `/dashboard`, `/chat`, `/problems/new`
+- [x] Register API route (`/api/auth/register`)
+- [ ] Google OAuth provider
+- [ ] `@auth/mongodb-adapter` wired
+- [ ] Role guards in UI (`student | tutor | admin`)
 - [ ] Problem uploads default `status: pending` → admin approves
 - [ ] Email verification (Resend free tier)
 
@@ -146,7 +200,7 @@ Goal: tutor onboarding, availability, booking flow.
 | Upload | Image + LaTeX/Markdown | Most flexible for math content |
 | Tutor sessions | Booking + external video link | MVP-friendly, no infra |
 
-## Environment Variables (needed per phase)
+## Environment Variables
 
 ```
 # Phase 2
