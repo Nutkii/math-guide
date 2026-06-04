@@ -98,7 +98,9 @@
     "errInvalidCredentials": "Invalid email or password",
     "errEmailTaken": "Email already registered",
     "errRegistrationFailed": "Registration failed. Please try again.",
-    "errServerError": "Something went wrong. Please try again."
+    "errServerError": "Something went wrong. Please try again.",
+    "orContinueWith": "or continue with",
+    "signInWithGoogle": "Sign in with Google"
   },
   "dashboard": {
     "title": "Dashboard",

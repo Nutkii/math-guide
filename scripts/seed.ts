@@ -1,4 +1,8 @@
 import mongoose from "mongoose";
+import bcrypt from "bcryptjs";
+import dns from "dns";
+
+dns.setServers(["8.8.8.8", "8.8.4.4"]);
 
 const MONGODB_URI = process.env.MONGODB_URI!;
 if (!MONGODB_URI) throw new Error("MONGODB_URI not set");
@@ -22,6 +26,7 @@ async function main() {
     Problem.deleteMany({}),
     Solution.deleteMany({}),
     TutorProfile.deleteMany({}),
+    User.deleteMany({}),
   ]);
   console.log("Cleared existing data");
 
@@ -167,11 +172,12 @@ async function main() {
   console.log("Seeded solutions");
 
   // Seed tutor profiles (create users first)
+  const tutorHash = await bcrypt.hash("tutor123", 12);
   const tutorUsers = await User.insertMany([
-    { name: "მარიამ კაპანაძე", email: "mariam@math-guide.ge", passwordHash: "$2b$12$placeholder", role: "tutor" },
-    { name: "ვახტანგ ბუჩუკური", email: "vakhtang@math-guide.ge", passwordHash: "$2b$12$placeholder", role: "tutor" },
-    { name: "სოფიო თხელიძე", email: "sofo@math-guide.ge", passwordHash: "$2b$12$placeholder", role: "tutor" },
-    { name: "ბექა გაბუნია", email: "beka@math-guide.ge", passwordHash: "$2b$12$placeholder", role: "tutor" },
+    { name: "მარიამ კაპანაძე", email: "mariam@math-guide.ge", passwordHash: tutorHash, role: "tutor" },
+    { name: "ვახტანგ ბუჩუკური", email: "vakhtang@math-guide.ge", passwordHash: tutorHash, role: "tutor" },
+    { name: "სოფიო თხელიძე", email: "sofo@math-guide.ge", passwordHash: tutorHash, role: "tutor" },
+    { name: "ბექა გაბუნია", email: "beka@math-guide.ge", passwordHash: tutorHash, role: "tutor" },
   ]);
 
   await TutorProfile.insertMany([
@@ -221,6 +227,16 @@ async function main() {
     },
   ]);
   console.log("Seeded tutors");
+
+  // Seed test student (login: student@test.ge / student123)
+  const studentHash = await bcrypt.hash("student123", 12);
+  await User.create({
+    name: "Test Student",
+    email: "student@test.ge",
+    passwordHash: studentHash,
+    role: "student",
+  });
+  console.log("Seeded test student: student@test.ge / student123");
 
   console.log("Seed complete!");
   await mongoose.disconnect();

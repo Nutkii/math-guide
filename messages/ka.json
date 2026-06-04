@@ -98,7 +98,9 @@
     "errInvalidCredentials": "ელფოსტა ან პაროლი არასწორია",
     "errEmailTaken": "ეს ელფოსტა უკვე დარეგისტრირებულია",
     "errRegistrationFailed": "რეგისტრაცია ვერ მოხერხდა. კიდევ სცადე.",
-    "errServerError": "შეცდომა მოხდა. გთხოვთ, კიდევ სცადოთ."
+    "errServerError": "შეცდომა მოხდა. გთხოვთ, კიდევ სცადოთ.",
+    "orContinueWith": "ან გააგრძელე",
+    "signInWithGoogle": "Google-ით შესვლა"
   },
   "dashboard": {
     "title": "კაბინეტი",

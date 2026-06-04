@@ -41,6 +41,11 @@ export async function Header() {
               <Link href={l.href}>{l.label}</Link>
             </Button>
           ))}
+          {(session?.user as { role?: string })?.role === "admin" && (
+            <Button asChild variant="ghost" size="sm" className="text-teal-500">
+              <Link href="/admin">Admin</Link>
+            </Button>
+          )}
         </nav>
 
         <div className="ml-auto flex items-center gap-1.5">

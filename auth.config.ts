@@ -12,6 +12,11 @@ export const authConfig: NextAuthConfig = {
       // Strip locale prefix for path check
       pathname = pathname.replace(/^\/(ka|en)(?=\/|$)/, "") || "/";
 
+      const adminPaths = ["/admin"];
+      if (adminPaths.some((p) => pathname.startsWith(p))) {
+        return isLoggedIn && (auth?.user as { role?: string })?.role === "admin";
+      }
+
       const protectedPaths = ["/dashboard", "/chat", "/problems/new"];
       if (protectedPaths.some((p) => pathname.startsWith(p))) {
         return isLoggedIn;
