@@ -5,24 +5,6 @@ export const authConfig: NextAuthConfig = {
     signIn: "/login",
   },
   callbacks: {
-    authorized({ auth, request: { nextUrl } }) {
-      const isLoggedIn = !!auth?.user;
-      let pathname = nextUrl.pathname;
-
-      // Strip locale prefix for path check
-      pathname = pathname.replace(/^\/(ka|en)(?=\/|$)/, "") || "/";
-
-      const adminPaths = ["/admin"];
-      if (adminPaths.some((p) => pathname.startsWith(p))) {
-        return isLoggedIn && (auth?.user as { role?: string })?.role === "admin";
-      }
-
-      const protectedPaths = ["/dashboard", "/chat", "/problems/new"];
-      if (protectedPaths.some((p) => pathname.startsWith(p))) {
-        return isLoggedIn;
-      }
-      return true;
-    },
     jwt({ token, user }) {
       if (user) {
         token.id = user.id!;
