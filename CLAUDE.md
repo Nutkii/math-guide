@@ -57,11 +57,19 @@ Next.js 15 + React 19 (App Router) + TypeScript · Tailwind v3 + shadcn/ui · Mo
 - [x] Admin nav link in header (role-gated, teal)
 - [ ] Ban/flag users, payments log, DAU/MRR metrics
 
-### ⬜ Phase 4 — AI (Groq)
-`groq-sdk` + `@ai-sdk/groq`, streaming chat, subscription gate, rate limiting (Upstash Redis 50 msg/day), conversation history.
+### 🔶 Phase 4 — AI (OpenRouter)
+`ai` + `@ai-sdk/react` + `@openrouter/ai-sdk-provider` (pivoted from the originally planned Groq stack). System prompt in `lib/ai/system-prompt.ts`, streaming route at `app/api/chat/route.ts` (session-gated via `auth()`), `/chat` page wired to `useChat`.
+- [x] Streaming chat (`openai/gpt-4o-mini` via OpenRouter, single call, no draft/translate step needed — see history below)
+- [x] Math-tutor system prompt (approved sources, step-by-step teaching style)
+- [x] Route-level auth guard (401 if not logged in, backed by the now-fixed middleware guard)
+- [ ] Subscription gate, rate limiting (Upstash Redis 50 msg/day), conversation history/persistence
+
+History: originally shipped on `nvidia/nemotron-3-nano-30b-a3b:free`, with a draft-in-English-then-translate-to-Georgian path (`lib/ai/system-prompt.ts` had `ENGLISH_DRAFT_SYSTEM_PROMPT` + `GEORGIAN_TRANSLATION_SYSTEM_PROMPT`) to work around that model's Georgian output. That model turned out to be a reasoning model whose chain-of-thought regularly leaked into (or replaced) the visible answer once the task got harder than a one-liner — confirmed via raw `generateText` probes, independent of `reasoning: { effort }` caps; one translation-stage call burned 25,850 reasoning tokens and took 123s before returning a mostly-untranslated answer. Switched to `openai/gpt-4o-mini`, which produces clean, correct Georgian directly in a single call (verified: correct math, proper structure, zero reasoning-token overhead) — so the draft/translate machinery was removed as unneeded complexity. If cost becomes a concern, cheaper alternatives tested well in the OpenRouter catalog at the time: `meta-llama/llama-3.3-70b-instruct` ($0.13/$0.40 per M tokens) and `mistralai/mistral-small-3.2-24b-instruct` ($0.10/$0.30 per M) — not yet verified for Georgian quality specifically.
+
+Known fragility: `components/problem/math-render.tsx`'s `MixedText` splits on a naive `/(\$[^$]+\$)/g` regex — no real LaTeX parsing. It only recognizes single `$...$`, not `$$...$$` (the system prompt now tells the model to never use `$$`, and to avoid Markdown `**`/`##` syntax it can't render). But if the model ever emits an odd number of `$` in one response (rare but not eliminated — observed once with `gpt-4o-mini`), the regex treats everything up to the *next* `$` as one giant math expression, which can swallow whole paragraphs (including Georgian prose) into KaTeX and render garbled, duplicated-looking text. Not touched further here since `MixedText` is shared with the problems/solutions pages — a real fix (e.g. a proper Markdown+KaTeX renderer) is a bigger change than this session's scope.
 
 ### ⬜ Phase 5 — Payments (TBC + BOG)
-$5/mo subscription + tutor hourly in GEL. `lib/payments/tbc.ts` + `lib/payments/bog.ts`, Vercel Cron for recurring, HMAC webhook, NBG FX rate.
+5 GEL/mo subscription (first month free — see `Subscription.status: "trialing"`) + tutor hourly in GEL. `lib/payments/tbc.ts` + `lib/payments/bog.ts`, Vercel Cron for recurring, HMAC webhook, NBG FX rate.
 
 ### ⬜ Phase 6 — Tutor Program
 `/become-tutor` → admin approval, availability editor, booking calendar, session lifecycle, reviews, payout ledger.
@@ -78,7 +86,7 @@ NEXTAUTH_URL=
 GOOGLE_CLIENT_ID=
 GOOGLE_CLIENT_SECRET=
 RESEND_API_KEY=
-GROQ_API_KEY=
+OPENROUTER_API_KEY=
 UPSTASH_REDIS_REST_URL=
 UPSTASH_REDIS_REST_TOKEN=
 UPLOADTHING_TOKEN=
@@ -99,3 +107,4 @@ BOG_CLIENT_SECRET=
 - Button `cool` variant = gradient teal→cyan→emerald (all CTAs).
 - `<MixedText text="..." />` auto-splits `$...$` inline LaTeX.
 - `lib/mock-data.ts` = Phase 1 data source — replace with DB calls in Phase 2.
+- `middleware.ts` gates `/admin` (role=admin), `/dashboard`, `/chat`, `/problems/new` directly off `req.auth` inside the wrapped callback — `authConfig.callbacks.authorized` is intentionally unused (NextAuth v5 only auto-enforces it when `auth` itself is the default export, not when wrapped with a custom callback like this repo does to compose with next-intl).

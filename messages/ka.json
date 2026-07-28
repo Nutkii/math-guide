@@ -45,6 +45,7 @@
     "monthly": "თვეში",
     "hourly": "საათში",
     "cta": "არჩევა",
+    "firstMonthFree": "პირველი თვე უფასოა",
     "plans": {
       "free": {
         "name": "უფასო",

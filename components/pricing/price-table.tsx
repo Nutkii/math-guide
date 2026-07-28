@@ -19,6 +19,7 @@ type Plan = {
   price: string;
   unitKey: "monthly" | "hourly";
   highlight?: boolean;
+  trialNote?: boolean;
   icon: React.ReactNode;
   href: string;
 };
@@ -33,9 +34,10 @@ const plans: Plan[] = [
   },
   {
     key: "ai",
-    price: "$5",
+    price: "₾5",
     unitKey: "monthly",
     highlight: true,
+    trialNote: true,
     icon: <Sparkles className="h-5 w-5" />,
     href: "/register?plan=ai",
   },
@@ -88,6 +90,11 @@ export function PriceTable() {
                   {t(plan.unitKey)}
                 </span>
               </div>
+              {plan.trialNote && (
+                <Badge variant="cool" className="mt-2 w-fit">
+                  {t("firstMonthFree")}
+                </Badge>
+              )}
             </CardHeader>
             <CardContent>
               <ul className="space-y-2.5 text-sm">

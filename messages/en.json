@@ -45,6 +45,7 @@
     "monthly": "per month",
     "hourly": "per hour",
     "cta": "Choose",
+    "firstMonthFree": "First month free",
     "plans": {
       "free": {
         "name": "Free",
