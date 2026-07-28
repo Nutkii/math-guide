@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import { connectDB } from "@/lib/db";
 import User from "@/models/User";
+import TutorProfile from "@/models/TutorProfile";
 import { registerSchema } from "@/lib/validations/auth";
 
 export async function POST(request: NextRequest) {
@@ -16,7 +17,17 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { name, email, password } = parsed.data;
+    const {
+      name,
+      email,
+      password,
+      role,
+      bio,
+      subjects,
+      hourlyRateGEL,
+      yearsExperience,
+      experience,
+    } = parsed.data;
 
     await connectDB();
 
@@ -29,7 +40,20 @@ export async function POST(request: NextRequest) {
     }
 
     const passwordHash = await bcrypt.hash(password, 12);
-    await User.create({ name, email, passwordHash });
+    const user = await User.create({ name, email, passwordHash, role });
+
+    if (role === "tutor") {
+      await TutorProfile.create({
+        userId: user._id,
+        name,
+        bio,
+        subjects,
+        hourlyRateGEL,
+        yearsExperience,
+        experience,
+        approved: false,
+      });
+    }
 
     return NextResponse.json({ ok: true }, { status: 201 });
   } catch (e) {

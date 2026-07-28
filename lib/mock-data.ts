@@ -47,6 +47,7 @@ export type Tutor = {
   rating: number;
   reviewCount: number;
   avatarSeed: string;
+  approved?: boolean;
 };
 
 const coolCovers = [

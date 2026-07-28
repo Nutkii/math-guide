@@ -34,6 +34,9 @@ export async function GET() {
               bio: profile.bio,
               subjects: profile.subjects,
               hourlyRateGEL: profile.hourlyRateGEL,
+              yearsExperience: profile.yearsExperience,
+              experience: profile.experience,
+              rejectionReason: profile.rejectionReason,
             }
           : null,
       };

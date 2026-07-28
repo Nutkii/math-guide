@@ -3,6 +3,7 @@ import { Star, CalendarDays } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { VerificationBadge } from "@/components/ui/verification-badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { formatGEL } from "@/lib/utils";
 import { getTutorById } from "@/lib/mock-data";
@@ -38,7 +39,10 @@ export default async function TutorPage({
           <AvatarFallback className="text-2xl">{initials}</AvatarFallback>
         </Avatar>
         <div className="flex-1 space-y-3">
-          <h1 className="text-3xl font-bold">{tutor.name}</h1>
+          <div className="flex flex-wrap items-center gap-2">
+            <h1 className="text-3xl font-bold">{tutor.name}</h1>
+            <VerificationBadge status={tutor.approved ?? true} />
+          </div>
           <div className="flex flex-wrap items-center gap-3 text-sm">
             <span className="inline-flex items-center gap-1">
               <Star className="h-4 w-4 fill-amber-400 text-amber-400" />

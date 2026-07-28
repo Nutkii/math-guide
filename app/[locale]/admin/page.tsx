@@ -45,6 +45,9 @@ interface TutorWithProfile {
     bio?: string;
     subjects: string[];
     hourlyRateGEL: number;
+    yearsExperience?: number;
+    experience?: string;
+    rejectionReason?: string;
   } | null;
 }
 
@@ -67,6 +70,7 @@ export default function AdminPage() {
   const [tutors, setTutors] = useState<TutorWithProfile[]>([]);
   const [metrics, setMetrics] = useState<Metrics | null>(null);
   const [rejectionReason, setRejectionReason] = useState<Record<string, string>>({});
+  const [tutorRejectionReason, setTutorRejectionReason] = useState<Record<string, string>>({});
 
   const fetchUsers = useCallback(async () => {
     const res = await fetch("/api/admin/users");
@@ -132,7 +136,10 @@ export default function AdminPage() {
     await fetch(`/api/admin/tutors/${tutorId}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ approved }),
+      body: JSON.stringify({
+        approved,
+        rejectionReason: approved ? undefined : tutorRejectionReason[tutorId],
+      }),
     });
     fetchTutors();
   }
@@ -281,66 +288,127 @@ export default function AdminPage() {
                     <tr className="border-b text-left text-muted-foreground">
                       <th className="px-4 py-3">Name</th>
                       <th className="px-4 py-3">Email</th>
-                      <th className="px-4 py-3">Profile</th>
+                      <th className="px-4 py-3">Status</th>
                       <th className="px-4 py-3">Subjects</th>
+                      <th className="px-4 py-3">Experience</th>
                       <th className="px-4 py-3">Rate (GEL)</th>
                       <th className="px-4 py-3">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y">
-                    {tutors.map((t) => (
-                      <tr key={t._id} className="hover:bg-muted/30 transition-colors">
-                        <td className="px-4 py-3 font-medium">{t.name}</td>
-                        <td className="px-4 py-3 text-muted-foreground">{t.email}</td>
-                        <td className="px-4 py-3">
-                          {t.profile ? (
-                            <Badge variant={t.profile.approved ? "cool" : "secondary"}>
-                              {t.profile.approved ? "Approved" : "Pending"}
-                            </Badge>
-                          ) : (
-                            <Badge variant="outline">No profile</Badge>
-                          )}
-                        </td>
-                        <td className="px-4 py-3 text-muted-foreground">
-                          {t.profile?.subjects.join(", ") || "—"}
-                        </td>
-                        <td className="px-4 py-3 text-muted-foreground">
-                          {t.profile?.hourlyRateGEL ?? "—"}
-                        </td>
-                        <td className="px-4 py-3">
-                          <div className="flex items-center gap-1">
-                            {t.profile && !t.profile.approved && (
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                className="h-7 text-xs text-emerald-500 border-emerald-500/40 hover:bg-emerald-500/10"
-                                onClick={() => setTutorProfileApproved(t._id, true)}
-                              >
-                                <CheckCircle className="h-3 w-3 mr-1" /> Approve
-                              </Button>
+                    {tutors.map((t) => {
+                      const rejected = !t.profile?.approved && !!t.profile?.rejectionReason;
+                      return (
+                        <tr key={t._id} className="hover:bg-muted/30 transition-colors align-top">
+                          <td className="px-4 py-3 font-medium">{t.name}</td>
+                          <td className="px-4 py-3 text-muted-foreground">{t.email}</td>
+                          <td className="px-4 py-3">
+                            {t.profile ? (
+                              <div className="space-y-1">
+                                <Badge
+                                  variant={
+                                    t.profile.approved
+                                      ? "cool"
+                                      : rejected
+                                        ? "destructive"
+                                        : "secondary"
+                                  }
+                                >
+                                  {t.profile.approved
+                                    ? "Approved"
+                                    : rejected
+                                      ? "Rejected"
+                                      : "Pending"}
+                                </Badge>
+                                {rejected && (
+                                  <p className="max-w-[180px] text-[11px] text-destructive">
+                                    {t.profile.rejectionReason}
+                                  </p>
+                                )}
+                              </div>
+                            ) : (
+                              <Badge variant="outline">No profile</Badge>
                             )}
-                            {t.profile?.approved && (
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                className="h-7 text-xs text-destructive border-destructive/40 hover:bg-destructive/10"
-                                onClick={() => setTutorProfileApproved(t._id, false)}
-                              >
-                                <XCircle className="h-3 w-3 mr-1" /> Revoke
-                              </Button>
+                          </td>
+                          <td className="px-4 py-3 text-muted-foreground">
+                            {t.profile?.subjects.join(", ") || "—"}
+                          </td>
+                          <td
+                            className="px-4 py-3 text-muted-foreground max-w-[220px]"
+                            title={t.profile?.experience}
+                          >
+                            {t.profile?.yearsExperience !== undefined && (
+                              <p className="text-xs font-medium text-foreground">
+                                {t.profile.yearsExperience} yrs
+                              </p>
                             )}
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              className="h-7 text-xs"
-                              onClick={() => changeRole(t._id, "student")}
-                            >
-                              {String.fromCharCode(8594)} student
-                            </Button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
+                            {t.profile?.experience && (
+                              <p className="line-clamp-2 text-[11px]">{t.profile.experience}</p>
+                            )}
+                          </td>
+                          <td className="px-4 py-3 text-muted-foreground">
+                            {t.profile?.hourlyRateGEL ?? "—"}
+                          </td>
+                          <td className="px-4 py-3">
+                            <div className="flex flex-col items-start gap-1.5">
+                              <div className="flex items-center gap-1">
+                                {t.profile && !t.profile.approved && (
+                                  <Button
+                                    size="sm"
+                                    variant="outline"
+                                    className="h-7 text-xs text-emerald-500 border-emerald-500/40 hover:bg-emerald-500/10"
+                                    onClick={() => setTutorProfileApproved(t._id, true)}
+                                  >
+                                    <CheckCircle className="h-3 w-3 mr-1" /> Approve
+                                  </Button>
+                                )}
+                                {t.profile && !t.profile.approved && (
+                                  <Button
+                                    size="sm"
+                                    variant="outline"
+                                    className="h-7 text-xs text-destructive border-destructive/40 hover:bg-destructive/10"
+                                    onClick={() => setTutorProfileApproved(t._id, false)}
+                                  >
+                                    <XCircle className="h-3 w-3 mr-1" /> Reject
+                                  </Button>
+                                )}
+                                {t.profile?.approved && (
+                                  <Button
+                                    size="sm"
+                                    variant="outline"
+                                    className="h-7 text-xs text-destructive border-destructive/40 hover:bg-destructive/10"
+                                    onClick={() => setTutorProfileApproved(t._id, false)}
+                                  >
+                                    <XCircle className="h-3 w-3 mr-1" /> Revoke
+                                  </Button>
+                                )}
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  className="h-7 text-xs"
+                                  onClick={() => changeRole(t._id, "student")}
+                                >
+                                  {String.fromCharCode(8594)} student
+                                </Button>
+                              </div>
+                              {t.profile && !t.profile.approved && (
+                                <Input
+                                  placeholder="Rejection reason (optional)"
+                                  className="h-7 w-48 text-[11px]"
+                                  value={tutorRejectionReason[t._id] ?? ""}
+                                  onChange={(e) =>
+                                    setTutorRejectionReason((prev) => ({
+                                      ...prev,
+                                      [t._id]: e.target.value,
+                                    }))
+                                  }
+                                />
+                              )}
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
                 {tutors.length === 0 && (

@@ -17,11 +17,14 @@ const TutorProfileSchema = new mongoose.Schema(
     bio: { type: String },
     subjects: [{ type: String }],
     hourlyRateGEL: { type: Number, required: true },
+    yearsExperience: { type: Number, required: true },
+    experience: { type: String, required: true },
     availability: [AvailabilitySlotSchema],
     rating: { type: Number, default: 0 },
     reviewCount: { type: Number, default: 0 },
     avatarSeed: { type: String },
     approved: { type: Boolean, default: false },
+    rejectionReason: { type: String },
   },
   { timestamps: true }
 );

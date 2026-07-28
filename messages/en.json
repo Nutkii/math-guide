@@ -100,14 +100,32 @@
     "errRegistrationFailed": "Registration failed. Please try again.",
     "errServerError": "Something went wrong. Please try again.",
     "orContinueWith": "or continue with",
-    "signInWithGoogle": "Sign in with Google"
+    "signInWithGoogle": "Sign in with Google",
+    "iAmA": "I am a",
+    "roleStudent": "Student",
+    "roleTutor": "Tutor",
+    "continue": "Continue",
+    "back": "Back",
+    "stepOf": "Step {current} of {total}",
+    "stepAccount": "Account details",
+    "stepTutorDetails": "Tutor details",
+    "tutorVerificationNotice": "Tutor accounts are reviewed by our team before appearing in the tutor directory. You can sign in right away, but your profile will show as \"Pending verification\" until approved.",
+    "subjects": "Subjects you teach",
+    "subjectsPlaceholder": "Algebra, Geometry, Calculus",
+    "hourlyRate": "Hourly rate (GEL)",
+    "yearsExperience": "Years teaching",
+    "experience": "Teaching experience",
+    "experiencePlaceholder": "Where have you taught? Degrees, certifications, notable results...",
+    "bio": "Short bio"
   },
   "dashboard": {
     "title": "Dashboard",
     "myUploads": "My uploads",
     "subscription": "Subscription",
     "bookings": "Bookings",
-    "chats": "Chats"
+    "chats": "Chats",
+    "tutorPendingNotice": "Your tutor profile is pending verification. An admin will review your details before you appear in the tutor directory.",
+    "tutorRejectedNotice": "Your tutor verification was rejected"
   },
   "common": {
     "loading": "Loading...",

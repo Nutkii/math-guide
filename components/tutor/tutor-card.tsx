@@ -3,6 +3,7 @@ import { Link } from "@/i18n/routing";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { VerificationBadge } from "@/components/ui/verification-badge";
 import { formatGEL } from "@/lib/utils";
 import type { Tutor } from "@/lib/mock-data";
 
@@ -22,7 +23,10 @@ export function TutorCard({ tutor }: { tutor: Tutor }) {
               <AvatarFallback className="text-base">{initials}</AvatarFallback>
             </Avatar>
             <div className="min-w-0 flex-1">
-              <h3 className="font-semibold leading-tight">{tutor.name}</h3>
+              <div className="flex flex-wrap items-center gap-1.5">
+                <h3 className="font-semibold leading-tight">{tutor.name}</h3>
+                <VerificationBadge status={tutor.approved ?? true} className="text-[10px]" />
+              </div>
               <div className="mt-1 flex items-center gap-1 text-xs text-muted-foreground">
                 <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
                 <span className="font-medium text-foreground">

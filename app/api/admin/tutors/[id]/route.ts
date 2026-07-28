@@ -17,11 +17,17 @@ export async function PATCH(
   }
 
   const { id } = await params;
-  const { approved } = await req.json();
+  const { approved, rejectionReason } = await req.json();
 
   try {
     await connectDB();
-    await TutorProfile.findOneAndUpdate({ userId: id }, { approved });
+    await TutorProfile.findOneAndUpdate(
+      { userId: id },
+      {
+        approved,
+        rejectionReason: approved ? undefined : rejectionReason,
+      }
+    );
     return NextResponse.json({ ok: true });
   } catch (err) {
     console.error("[PATCH /api/admin/tutors/:id]", err);

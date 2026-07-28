@@ -178,6 +178,8 @@ async function main() {
     { name: "ვახტანგ ბუჩუკური", email: "vakhtang@math-guide.ge", passwordHash: tutorHash, role: "tutor" },
     { name: "სოფიო თხელიძე", email: "sofo@math-guide.ge", passwordHash: tutorHash, role: "tutor" },
     { name: "ბექა გაბუნია", email: "beka@math-guide.ge", passwordHash: tutorHash, role: "tutor" },
+    { name: "ნინო ხარაზიშვილი", email: "nino@math-guide.ge", passwordHash: tutorHash, role: "tutor" },
+    { name: "გიორგი სამხარაძე", email: "giorgi@math-guide.ge", passwordHash: tutorHash, role: "tutor" },
   ]);
 
   await TutorProfile.insertMany([
@@ -187,6 +189,8 @@ async function main() {
       bio: "10 წლის გამოცდილების მათემატიკის მასწავლებელი.",
       subjects: ["Algebra", "Geometry", "Calculus"],
       hourlyRateGEL: 60,
+      yearsExperience: 10,
+      experience: "საჯარო სკოლაში მათემატიკის მასწავლებელი 10 წელია, TSU-ს მათემატიკის ფაკულტეტის მაგისტრი.",
       rating: 4.9,
       reviewCount: 124,
       avatarSeed: "mariam",
@@ -198,6 +202,8 @@ async function main() {
       bio: "TSU-ს მათემატიკის ფაკულტეტის კურსდამთავრებული.",
       subjects: ["Olympiad", "Algebra", "Number Theory"],
       hourlyRateGEL: 80,
+      yearsExperience: 6,
+      experience: "ეროვნული მათემატიკის ოლიმპიადის ორგზის ლაურეატი, 6 წელია ამზადებს მოსწავლეებს ოლიმპიადებისთვის.",
       rating: 4.8,
       reviewCount: 87,
       avatarSeed: "vakhtang",
@@ -209,6 +215,8 @@ async function main() {
       bio: "კერძო რეპეტიტორი 5 წელია.",
       subjects: ["Algebra", "Geometry"],
       hourlyRateGEL: 50,
+      yearsExperience: 5,
+      experience: "5 წელია ვმუშაობ კერძო რეპეტიტორად მე-7-დან მე-11 კლასის მოსწავლეებთან, ეროვნული გამოცდებისთვის მომზადება.",
       rating: 4.95,
       reviewCount: 156,
       avatarSeed: "sofo",
@@ -220,13 +228,44 @@ async function main() {
       bio: "ფიზიკა-მათემატიკის ბაკალავრი, ETH Zurich.",
       subjects: ["Calculus", "Linear Algebra"],
       hourlyRateGEL: 90,
+      yearsExperience: 3,
+      experience: "ETH Zurich-ის ფიზიკა-მათემატიკის ბაკალავრი, უნივერსიტეტში teaching assistant-ის გამოცდილებით.",
       rating: 4.7,
       reviewCount: 42,
       avatarSeed: "beka",
       approved: true,
     },
+    {
+      // Dummy: newly registered tutor awaiting admin review
+      userId: tutorUsers[4]._id,
+      name: "ნინო ხარაზიშვილი",
+      bio: "მათემატიკის მასწავლებელი, ვამზადებ მოსწავლეებს ეროვნული გამოცდებისთვის.",
+      subjects: ["Algebra", "Geometry"],
+      hourlyRateGEL: 45,
+      yearsExperience: 2,
+      experience: "2 წელია ვასწავლი კერძო სკოლაში, მე-9-დან მე-12 კლასამდე. ჯერ არ მაქვს ოფიციალური სერტიფიკატი.",
+      rating: 0,
+      reviewCount: 0,
+      avatarSeed: "nino-pending",
+      approved: false,
+    },
+    {
+      // Dummy: reviewed and rejected by admin (insufficient verification)
+      userId: tutorUsers[5]._id,
+      name: "გიორგი სამხარაძე",
+      bio: "მათემატიკის მოყვარული, ონლაინ კურსების გავლილი.",
+      subjects: ["Algebra"],
+      hourlyRateGEL: 30,
+      yearsExperience: 1,
+      experience: "ონლაინ კურსები გავლილი მაქვს (Coursera, Khan Academy), ფორმალური სწავლების გამოცდილება არ მაქვს.",
+      rating: 0,
+      reviewCount: 0,
+      avatarSeed: "giorgi-rejected",
+      approved: false,
+      rejectionReason: "No verifiable teaching credentials or references provided.",
+    },
   ]);
-  console.log("Seeded tutors");
+  console.log("Seeded tutors (4 verified, 1 pending, 1 rejected)");
 
   // Seed test student (login: student@test.ge / student123)
   const studentHash = await bcrypt.hash("student123", 12);
