@@ -270,6 +270,50 @@ export const solutions: Solution[] = [
     upvotes: 31,
     createdAt: "2026-04-08",
   },
+  {
+    id: "s4",
+    problemId: "p2",
+    authorName: "ნინო ჯავახიშვილი",
+    contentKa:
+      "ერთადერთი ფესვისთვის დისკრიმინანტი ნულის ტოლი უნდა იყოს: $D = k^2 - 36 = 0$, აქედან $k = \\pm 6$.",
+    contentEn:
+      "For a unique root the discriminant must vanish: $D = k^2 - 36 = 0$, so $k = \\pm 6$.",
+    upvotes: 15,
+    createdAt: "2026-04-16",
+  },
+  {
+    id: "s5",
+    problemId: "p4",
+    authorName: "ანა გელაშვილი",
+    contentKa:
+      "პირობით $x^2 - 1 = 2^3 = 8$, ანუ $x^2 = 9$, $x = \\pm 3$. ორივე ფესვი აკმაყოფილებს განსაზღვრის არეს $x^2 > 1$.",
+    contentEn:
+      "By definition $x^2 - 1 = 2^3 = 8$, so $x^2 = 9$, $x = \\pm 3$. Both roots satisfy the domain condition $x^2 > 1$.",
+    upvotes: 9,
+    createdAt: "2026-04-17",
+  },
+  {
+    id: "s6",
+    problemId: "p5",
+    authorName: "დათო ლომიძე",
+    contentKa:
+      "ნამრავლის წარმოებულის წესით: $f'(x) = 3x^2 \\sin(x) + x^3 \\cos(x)$.",
+    contentEn:
+      "By the product rule: $f'(x) = 3x^2 \\sin(x) + x^3 \\cos(x)$.",
+    upvotes: 12,
+    createdAt: "2026-04-18",
+  },
+  {
+    id: "s7",
+    problemId: "p6",
+    authorName: "გიორგი მაჭარაშვილი",
+    contentKa:
+      "ვსარგებლობთ ცნობილი ზღვარით $\\lim_{x \\to 0} \\frac{\\sin x}{x} = 1$: $\\lim_{x \\to 0} \\frac{\\sin(3x)}{x} = 3 \\cdot \\lim_{x \\to 0} \\frac{\\sin(3x)}{3x} = 3$.",
+    contentEn:
+      "Using the standard limit $\\lim_{x \\to 0} \\frac{\\sin x}{x} = 1$: $\\lim_{x \\to 0} \\frac{\\sin(3x)}{x} = 3 \\cdot \\lim_{x \\to 0} \\frac{\\sin(3x)}{3x} = 3$.",
+    upvotes: 7,
+    createdAt: "2026-04-19",
+  },
 ];
 
 export const tutors: Tutor[] = [

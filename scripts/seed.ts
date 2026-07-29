@@ -121,7 +121,7 @@ async function main() {
   ]);
   console.log(`Seeded ${chapters.length} chapters`);
 
-  const [, alg9c2, , geo10c1, , alg11c1, , , cal12c2] = chapters;
+  const [, alg9c2, , geo10c1, , alg11c1, , cal12c1, cal12c2] = chapters;
 
   // Seed problems
   const problems = await Problem.insertMany([
@@ -180,6 +180,17 @@ async function main() {
       authorName: "ანა გელაშვილი",
       status: "approved",
     },
+    {
+      bookId: cal12._id,
+      bookSlug: "calculus-12",
+      chapterId: cal12c1._id,
+      number: "1.18",
+      statementKa: "გამოთვალეთ ზღვარი: $\\lim_{x \\to 0} \\frac{\\sin(3x)}{x}$",
+      statementEn: "Evaluate the limit: $\\lim_{x \\to 0} \\frac{\\sin(3x)}{x}$",
+      difficulty: "hard",
+      authorName: "დათო ლომიძე",
+      status: "approved",
+    },
   ]);
   console.log(`Seeded ${problems.length} problems`);
 
@@ -205,6 +216,34 @@ async function main() {
       contentKa: "$6^2 + 8^2 = 100 = 10^2$, ე.ი. სამკუთხედი მართკუთხაა. ფართობი: $S = \\frac{1}{2} \\cdot 6 \\cdot 8 = 24$.",
       contentEn: "$6^2 + 8^2 = 100 = 10^2$, so the triangle is right-angled. Area: $S = \\frac{1}{2} \\cdot 6 \\cdot 8 = 24$.",
       upvotes: 31,
+    },
+    {
+      problemId: problems[1]._id,
+      authorName: "ნინო ჯავახიშვილი",
+      contentKa: "ერთადერთი ფესვისთვის დისკრიმინანტი ნულის ტოლი უნდა იყოს: $D = k^2 - 36 = 0$, აქედან $k = \\pm 6$.",
+      contentEn: "For a unique root the discriminant must vanish: $D = k^2 - 36 = 0$, so $k = \\pm 6$.",
+      upvotes: 15,
+    },
+    {
+      problemId: problems[3]._id,
+      authorName: "ანა გელაშვილი",
+      contentKa: "პირობით $x^2 - 1 = 2^3 = 8$, ანუ $x^2 = 9$, $x = \\pm 3$. ორივე ფესვი აკმაყოფილებს განსაზღვრის არეს $x^2 > 1$.",
+      contentEn: "By definition $x^2 - 1 = 2^3 = 8$, so $x^2 = 9$, $x = \\pm 3$. Both roots satisfy the domain condition $x^2 > 1$.",
+      upvotes: 9,
+    },
+    {
+      problemId: problems[4]._id,
+      authorName: "დათო ლომიძე",
+      contentKa: "ნამრავლის წარმოებულის წესით: $f'(x) = 3x^2 \\sin(x) + x^3 \\cos(x)$.",
+      contentEn: "By the product rule: $f'(x) = 3x^2 \\sin(x) + x^3 \\cos(x)$.",
+      upvotes: 12,
+    },
+    {
+      problemId: problems[5]._id,
+      authorName: "გიორგი მაჭარაშვილი",
+      contentKa: "ვსარგებლობთ ცნობილი ზღვარით $\\lim_{x \\to 0} \\frac{\\sin x}{x} = 1$: $\\lim_{x \\to 0} \\frac{\\sin(3x)}{x} = 3 \\cdot \\lim_{x \\to 0} \\frac{\\sin(3x)}{3x} = 3$.",
+      contentEn: "Using the standard limit $\\lim_{x \\to 0} \\frac{\\sin x}{x} = 1$: $\\lim_{x \\to 0} \\frac{\\sin(3x)}{x} = 3 \\cdot \\lim_{x \\to 0} \\frac{\\sin(3x)}{3x} = 3$.",
+      upvotes: 7,
     },
   ]);
   console.log("Seeded solutions");

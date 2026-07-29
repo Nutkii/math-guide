@@ -6,9 +6,9 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function formatGEL(amount: number) {
-  return new Intl.NumberFormat("ka-GE", {
-    style: "currency",
-    currency: "GEL",
-    maximumFractionDigits: 0,
-  }).format(amount);
+  // Intl.NumberFormat's GEL currency-symbol resolution differs between
+  // Node's ICU data and browsers (falls back to "GEL" vs "₾"), which caused
+  // a hydration mismatch once tutor cards started rendering inside a client
+  // boundary. Format manually so server and client always agree.
+  return `₾${Math.round(amount).toLocaleString("en-US")}`;
 }

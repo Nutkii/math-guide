@@ -15,10 +15,33 @@
     "logout": "Log out"
   },
   "landing": {
+    "eyebrow": "Straight from your textbook",
     "heroTitle": "Every math problem from your Georgian textbook, solved.",
     "heroSubtitle": "School-book solutions, AI step-by-step help, and live tutors — in one place.",
     "ctaPrimary": "Start free",
     "ctaSecondary": "Learn more",
+    "demo": {
+      "label": "Live example",
+      "reference": "Algebra 9 · Ch. 2 · No. 2.14",
+      "factor": "Factor",
+      "roots": "Roots",
+      "graded": "Correct"
+    },
+    "sections": {
+      "books": "Textbooks",
+      "problems": "Recently added problems"
+    },
+    "trust": {
+      "curriculum": "Full Georgian curriculum, grades 7–12",
+      "ai": "AI tutor, available 24/7",
+      "tutors": "Vetted live tutors",
+      "pricing": "₾5/mo — first month free"
+    },
+    "closing": {
+      "title": "Your next problem is already in the library.",
+      "subtitle": "Pick a book, find your chapter, get unstuck in minutes.",
+      "cta": "Start free"
+    },
     "features": {
       "title": "What you get",
       "library": {
@@ -46,6 +69,11 @@
     "hourly": "per hour",
     "cta": "Choose",
     "firstMonthFree": "First month free",
+    "trust": [
+      "Secure checkout via Flitt",
+      "Cancel anytime",
+      "Billed in GEL"
+    ],
     "plans": {
       "free": {
         "name": "Free",
@@ -75,6 +103,16 @@
         ]
       }
     }
+  },
+  "books": {
+    "title": "Textbooks",
+    "subtitle": "Browse the Georgian math curriculum, grade by grade.",
+    "filterAll": "All grades"
+  },
+  "tutors": {
+    "title": "Tutors",
+    "subtitle": "Book vetted Georgian math tutors by the hour.",
+    "filterAll": "All subjects"
   },
   "problem": {
     "uploadTitle": "Upload a problem",
