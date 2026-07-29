@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
+import { useSearchParams } from "next/navigation";
 import { GraduationCap, User as UserIcon } from "lucide-react";
 import { Link, useRouter } from "@/i18n/routing";
 import { Button } from "@/components/ui/button";
@@ -19,6 +20,8 @@ export default function RegisterPage() {
   const t = useTranslations("auth");
   const tn = useTranslations("nav");
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const wantsAiPro = searchParams.get("plan") === "ai";
   const [step, setStep] = useState<1 | 2>(1);
   const [loading, setLoading] = useState(false);
   const [serverError, setServerError] = useState("");
@@ -74,10 +77,24 @@ export default function RegisterPage() {
 
       if (result?.error) {
         router.push("/login");
-      } else {
-        router.push("/dashboard");
-        router.refresh();
+        return;
       }
+
+      if (wantsAiPro) {
+        const checkoutRes = await fetch("/api/payments/flitt/checkout", {
+          method: "POST",
+        });
+        const checkoutData = await checkoutRes.json();
+        if (checkoutRes.ok) {
+          window.location.href = checkoutData.checkoutUrl;
+          return;
+        }
+        setServerError(checkoutData.error ?? t("errServerError"));
+        return;
+      }
+
+      router.push("/dashboard");
+      router.refresh();
     } catch {
       setServerError(t("errServerError"));
     } finally {

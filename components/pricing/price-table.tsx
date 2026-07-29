@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+import { useSession } from "next-auth/react";
 import { useTranslations } from "next-intl";
 import { Check, Sparkles, GraduationCap, Library } from "lucide-react";
 import { Link } from "@/i18n/routing";
@@ -52,6 +54,23 @@ const plans: Plan[] = [
 
 export function PriceTable() {
   const t = useTranslations("pricing");
+  const { data: session } = useSession();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  async function handleBuyAiPro() {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch("/api/payments/flitt/checkout", { method: "POST" });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? "Failed to start checkout");
+      window.location.href = data.checkoutUrl;
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Something went wrong");
+      setLoading(false);
+    }
+  }
 
   return (
     <div className="grid gap-6 md:grid-cols-3">
@@ -106,14 +125,28 @@ export function PriceTable() {
                 ))}
               </ul>
             </CardContent>
-            <CardFooter>
-              <Button
-                asChild
-                variant={plan.highlight ? "cool" : "outline"}
-                className="w-full"
-              >
-                <Link href={plan.href}>{t("cta")}</Link>
-              </Button>
+            <CardFooter className="flex-col items-stretch gap-2">
+              {plan.key === "ai" && session?.user ? (
+                <Button
+                  variant="cool"
+                  className="w-full"
+                  disabled={loading}
+                  onClick={handleBuyAiPro}
+                >
+                  {loading ? "..." : t("cta")}
+                </Button>
+              ) : (
+                <Button
+                  asChild
+                  variant={plan.highlight ? "cool" : "outline"}
+                  className="w-full"
+                >
+                  <Link href={plan.href}>{t("cta")}</Link>
+                </Button>
+              )}
+              {plan.key === "ai" && error && (
+                <span className="text-xs text-destructive">{error}</span>
+              )}
             </CardFooter>
           </Card>
         );

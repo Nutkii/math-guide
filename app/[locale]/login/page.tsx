@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
+import { useSearchParams } from "next/navigation";
 import { Link, useRouter } from "@/i18n/routing";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -16,8 +17,18 @@ export default function LoginPage() {
   const t = useTranslations("auth");
   const tn = useTranslations("nav");
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [loading, setLoading] = useState(false);
   const [serverError, setServerError] = useState("");
+
+  useEffect(() => {
+    const error = searchParams.get("error");
+    if (error === "AccessDenied" || error === "Configuration") {
+      setServerError(t("errAccessDenied"));
+    } else if (error) {
+      setServerError(t("errServerError"));
+    }
+  }, [searchParams, t]);
 
   const {
     register,

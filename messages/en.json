@@ -97,6 +97,7 @@
     "noAccount": "No account yet?",
     "hasAccount": "Already have an account?",
     "errInvalidCredentials": "Invalid email or password",
+    "errAccessDenied": "You denied Google access to your name, email, and profile picture. We need that to create or find your account, so sign-in can't continue without it. Click \"Allow\" on Google's screen next time, or sign in with email/password instead.",
     "errEmailTaken": "Email already registered",
     "errRegistrationFailed": "Registration failed. Please try again.",
     "errServerError": "Something went wrong. Please try again.",

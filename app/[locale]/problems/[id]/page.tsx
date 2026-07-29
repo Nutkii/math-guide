@@ -9,10 +9,10 @@ import { Separator } from "@/components/ui/separator";
 import { MixedText } from "@/components/problem/math-render";
 import { SolutionBlock } from "@/components/problem/solution-block";
 import {
-  getProblemById,
-  getBookBySlug,
-  getSolutionsForProblem,
-} from "@/lib/mock-data";
+  getProblemByIdDB,
+  getBookLiteBySlugDB,
+  getSolutionsForProblemDB,
+} from "@/lib/db-data";
 
 type Params = { locale: string; id: string };
 
@@ -22,14 +22,14 @@ export default async function ProblemPage({
   params: Promise<Params>;
 }) {
   const { locale, id } = await params;
-  const problem = getProblemById(id);
+  const problem = await getProblemByIdDB(id);
   if (!problem) notFound();
 
   const t = await getTranslations({ locale, namespace: "problem" });
   const tc = await getTranslations({ locale, namespace: "common" });
 
-  const book = getBookBySlug(problem.bookSlug);
-  const sols = getSolutionsForProblem(problem.id);
+  const book = await getBookLiteBySlugDB(problem.bookSlug);
+  const sols = await getSolutionsForProblemDB(problem.id);
   const statement = locale === "ka" ? problem.statementKa : problem.statementEn;
   const bookTitle = book
     ? locale === "ka"

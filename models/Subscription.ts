@@ -9,9 +9,11 @@ const SubscriptionSchema = new mongoose.Schema(
       enum: ["active", "cancelled", "expired", "trialing"],
       default: "active",
     },
-    provider: { type: String, enum: ["tbc", "bog"] },
+    provider: { type: String, enum: ["tbc", "bog", "flitt"] },
     providerSubId: { type: String },
     cardToken: { type: String },
+    flittOrderId: { type: String },
+    flittLastPaymentId: { type: String },
     currentPeriodEnd: { type: Date },
   },
   { timestamps: true }

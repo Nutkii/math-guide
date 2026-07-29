@@ -14,6 +14,7 @@ const ProblemSchema = new mongoose.Schema(
       enum: ["easy", "medium", "hard"],
       default: "medium",
     },
+    isTest: { type: Boolean, default: false },
     authorId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     authorName: { type: String },
     status: {

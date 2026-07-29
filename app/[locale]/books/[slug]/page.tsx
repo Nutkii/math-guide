@@ -4,7 +4,7 @@ import { BookOpen, ChevronRight } from "lucide-react";
 import { Link } from "@/i18n/routing";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { getBookBySlug } from "@/lib/mock-data";
+import { getBookBySlugDB } from "@/lib/db-data";
 
 type Params = { locale: string; slug: string };
 
@@ -14,7 +14,7 @@ export default async function BookDetailPage({
   params: Promise<Params>;
 }) {
   const { locale, slug } = await params;
-  const book = getBookBySlug(slug);
+  const book = await getBookBySlugDB(slug);
   if (!book) notFound();
 
   const tc = await getTranslations({ locale, namespace: "common" });
@@ -49,7 +49,7 @@ export default async function BookDetailPage({
                 return (
                   <Link
                     key={c.id}
-                    href={`/problems?book=${book.slug}&chapter=${c.id}`}
+                    href={`/problems?chapterId=${c.id}`}
                     className="group block"
                   >
                     <Card className="transition-all group-hover:border-primary/40">

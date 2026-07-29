@@ -9,12 +9,12 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { VerificationBadge } from "@/components/ui/verification-badge";
 import { auth } from "@/auth";
 import { connectDB } from "@/lib/db";
 import TutorProfile from "@/models/TutorProfile";
+import Subscription from "@/models/Subscription";
+import { SubscriptionCard } from "@/components/dashboard/subscription-card";
 
 export default async function DashboardPage() {
   const t = await getTranslations("dashboard");
@@ -24,12 +24,19 @@ export default async function DashboardPage() {
   const initial = name ? name[0].toUpperCase() : "?";
 
   let tutorProfile: { approved: boolean; rejectionReason?: string } | null = null;
-  if (role === "tutor" && session?.user) {
+  let subscriptionStatus: "active" | "trialing" | "cancelled" | "expired" | null = null;
+  if (session?.user) {
     await connectDB();
-    tutorProfile = await TutorProfile.findOne(
-      { userId: (session.user as { id: string }).id },
-      { approved: 1, rejectionReason: 1 }
-    ).lean();
+    const userId = (session.user as { id: string }).id;
+    if (role === "tutor") {
+      tutorProfile = await TutorProfile.findOne(
+        { userId },
+        { approved: 1, rejectionReason: 1 }
+      ).lean();
+    }
+    const subscription = await Subscription.findOne({ userId }, { status: 1 }).lean();
+    subscriptionStatus =
+      (subscription?.status as typeof subscriptionStatus) ?? null;
   }
 
   const tiles = [
@@ -68,13 +75,10 @@ export default async function DashboardPage() {
         <div>
           <h1 className="text-2xl font-bold">{t("title")}</h1>
           <div className="mt-1 flex flex-wrap items-center gap-2 text-sm">
-            <Badge variant="cool">Free plan</Badge>
+            <SubscriptionCard status={subscriptionStatus} />
             {tutorProfile && (
               <VerificationBadge status={tutorProfile.approved} />
             )}
-            <Button asChild variant="link" size="sm" className="h-auto p-0">
-              <Link href="/pricing">Upgrade to AI Pro →</Link>
-            </Button>
           </div>
         </div>
       </header>

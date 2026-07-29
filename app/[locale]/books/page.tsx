@@ -1,9 +1,15 @@
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import { BookCover } from "@/components/book/book-cover";
-import { books } from "@/lib/mock-data";
+import { getBooksDB } from "@/lib/db-data";
 
-export default function BooksPage() {
-  const t = useTranslations("nav");
+export default async function BooksPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "nav" });
+  const books = await getBooksDB();
 
   return (
     <div className="container py-12">
