@@ -110,6 +110,19 @@
   .animate-line-in {
     animation: line-in 0.5s ease-out both;
   }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition:
+      opacity 0.6s ease,
+      transform 0.6s ease;
+  }
+
+  [data-slide][data-active] .reveal {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes stamp {
@@ -143,6 +156,12 @@
   .animate-line-in,
   .text-gradient-cool {
     animation: none !important;
+  }
+
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
   }
 }
 

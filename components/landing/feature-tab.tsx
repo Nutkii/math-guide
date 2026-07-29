@@ -19,7 +19,10 @@ export function FeatureTab({
   index: number;
 }) {
   return (
-    <div className="group relative overflow-hidden rounded-lg border border-border/60 bg-card pl-5 shadow-sm transition-shadow hover:shadow-md">
+    <div
+      className="reveal group relative overflow-hidden rounded-lg border border-border/60 bg-card pl-5 shadow-sm transition-shadow hover:shadow-md"
+      style={{ transitionDelay: `${150 + index * 100}ms` }}
+    >
       <span
         className={`absolute inset-y-0 left-0 w-1.5 ${tabColors[index % tabColors.length]}`}
       />

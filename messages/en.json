@@ -27,11 +27,24 @@
       "roots": "Roots",
       "graded": "Correct"
     },
+    "deck": {
+      "hero": "Overview",
+      "trust": "Why us",
+      "features": "Features",
+      "books": "Library",
+      "problems": "Problems",
+      "tutors": "Tutors",
+      "closing": "Start"
+    },
     "sections": {
       "books": "Textbooks",
-      "problems": "Recently added problems"
+      "problems": "Recently added problems",
+      "tutors": "Live tutors, ready to book",
+      "tutorsSubtitle": "Vetted teachers across every grade. Book by the hour, pay in GEL."
     },
     "trust": {
+      "title": "Why students stick around",
+      "subtitle": "No fluff — the full curriculum, backup when you're stuck, and a real teacher when you need one.",
       "curriculum": "Full Georgian curriculum, grades 7–12",
       "ai": "AI tutor, available 24/7",
       "tutors": "Vetted live tutors",
