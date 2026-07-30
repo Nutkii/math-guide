@@ -32,7 +32,7 @@ export function Slide({
       data-slide
       {...(first ? { "data-active": "" } : {})}
       className={cn(
-        "relative flex h-full w-full shrink-0 snap-start flex-col justify-center overflow-x-hidden overflow-y-auto px-6 py-14 sm:px-10 sm:py-20 md:pl-24 md:pr-16 lg:pl-32",
+        "relative flex h-[calc(100dvh_-_4rem)] w-full shrink-0 snap-start flex-col justify-center overflow-x-hidden overflow-y-auto px-6 py-14 sm:px-10 sm:py-20 md:pl-24 md:pr-16 lg:pl-32",
         !ink && "bg-grid-paper",
         index > 0 && "border-t border-dashed border-border/50",
         className,

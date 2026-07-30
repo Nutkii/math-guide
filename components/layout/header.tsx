@@ -11,7 +11,6 @@ export async function Header() {
   const session = await auth();
 
   const links = [
-    { href: "/books", label: t("books") },
     { href: "/problems", label: t("problems") },
     { href: "/tutors", label: t("tutors") },
     { href: "/pricing", label: t("pricing") },

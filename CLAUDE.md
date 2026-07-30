@@ -38,7 +38,7 @@ Next.js 15 + React 19 (App Router) + TypeScript · Tailwind v3 + shadcn/ui · Mo
 
 ### 🔶 Phase 2 — Backend + Mongoose
 - [x] `lib/db.ts` singleton, models: User, Book, Chapter, Problem, Solution, TutorProfile, Subscription, Booking, Payment
-- [x] API routes: `/api/books`, `/api/problems`, `/api/solutions`, `/api/tutors`
+- [x] API routes: `/api/problems`, `/api/solutions`, `/api/tutors`
 - [x] Zod schemas in `lib/validations/`, seed script `scripts/seed.ts`
 - [ ] File uploads (Cloudinary wired in `lib/cloudinary.ts`, upload route at `app/api/upload/`)
 - [ ] Wire pages to real data (replace `lib/mock-data.ts`)
@@ -117,3 +117,4 @@ FLITT_CREDIT_KEY=
 - `<MixedText text="..." />` auto-splits `$...$` inline LaTeX.
 - `lib/mock-data.ts` = Phase 1 data source — replace with DB calls in Phase 2.
 - `middleware.ts` gates `/admin` (role=admin), `/dashboard`, `/chat`, `/problems/new` directly off `req.auth` inside the wrapped callback — `authConfig.callbacks.authorized` is intentionally unused (NextAuth v5 only auto-enforces it when `auth` itself is the default export, not when wrapped with a custom callback like this repo does to compose with next-intl).
+- Public "Books" feature removed (nav link, `/books` pages, `/api/books`, `BookCover`/`BookGradeFilter`, mock `books` data) — the seeded books had fictional publishers (Klett/Intelekti/Bakur Sulakauri) implying real licensed textbooks, which was misleading. `Book`/`Chapter` Mongoose models and DB data are untouched (Problems are still organized by `bookSlug`/`chapterId` internally, and `getChaptersOverviewDB` still uses `BookModel` for grade-based sort order) — only the public-facing browsing UI is gone. Problem pages now show a chapter/topic breadcrumb (linking to `/problems?chapterId=...`) instead of a book link.

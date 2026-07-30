@@ -3,10 +3,7 @@ import BookModel from "@/models/Book";
 import ChapterModel from "@/models/Chapter";
 import ProblemModel from "@/models/Problem";
 import SolutionModel from "@/models/Solution";
-import type { Book, Chapter, Problem, Solution } from "@/lib/mock-data";
-
-const FALLBACK_COVER =
-  "linear-gradient(135deg, hsl(180 70% 45%), hsl(160 65% 50%))";
+import type { Problem, Solution } from "@/lib/mock-data";
 
 async function solutionCounts(problemIds: string[]) {
   if (problemIds.length === 0) return new Map<string, number>();
@@ -42,53 +39,6 @@ function mapProblem(p: ProblemDoc, counts: Map<string, number>): Problem {
     difficulty: p.difficulty,
     solutionCount: counts.get(id) ?? 0,
     authorName: p.authorName ?? "",
-  };
-}
-
-async function chaptersForBook(bookId: unknown): Promise<Chapter[]> {
-  const chapters = await ChapterModel.find({ bookId }).sort({ number: 1 }).lean();
-  return Promise.all(
-    chapters.map(async (c) => ({
-      id: String(c._id),
-      number: c.number,
-      titleKa: c.titleKa,
-      titleEn: c.titleEn,
-      problemCount: await ProblemModel.countDocuments({
-        chapterId: c._id,
-        status: "approved",
-      }),
-    }))
-  );
-}
-
-export async function getBooksDB(): Promise<Book[]> {
-  await connectDB();
-  const books = await BookModel.find().sort({ grade: 1 }).lean();
-  return Promise.all(
-    books.map(async (b) => ({
-      slug: b.slug,
-      titleKa: b.titleKa,
-      titleEn: b.titleEn,
-      grade: b.grade,
-      publisher: b.publisher,
-      cover: b.coverGradient ?? FALLBACK_COVER,
-      chapters: await chaptersForBook(b._id),
-    }))
-  );
-}
-
-export async function getBookBySlugDB(slug: string): Promise<Book | null> {
-  await connectDB();
-  const b = await BookModel.findOne({ slug }).lean();
-  if (!b) return null;
-  return {
-    slug: b.slug,
-    titleKa: b.titleKa,
-    titleEn: b.titleEn,
-    grade: b.grade,
-    publisher: b.publisher,
-    cover: b.coverGradient ?? FALLBACK_COVER,
-    chapters: await chaptersForBook(b._id),
   };
 }
 
@@ -167,13 +117,6 @@ export async function getProblemByIdDB(id: string): Promise<Problem | null> {
   if (!p || p.status !== "approved") return null;
   const counts = await solutionCounts([String(p._id)]);
   return mapProblem(p, counts);
-}
-
-export async function getBookLiteBySlugDB(slug: string) {
-  await connectDB();
-  const b = await BookModel.findOne({ slug }).lean();
-  if (!b) return null;
-  return { slug: b.slug, titleKa: b.titleKa, titleEn: b.titleEn };
 }
 
 export async function getSolutionsForProblemDB(

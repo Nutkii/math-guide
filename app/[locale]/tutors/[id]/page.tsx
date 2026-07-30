@@ -1,10 +1,10 @@
 import { notFound } from "next/navigation";
 import { Star, CalendarDays } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { VerificationBadge } from "@/components/ui/verification-badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { BookingSchedule } from "@/components/tutor/booking-schedule";
 import { formatGEL } from "@/lib/utils";
 import { getTutorById } from "@/lib/mock-data";
 
@@ -40,7 +40,7 @@ export default async function TutorPage({
         </Avatar>
         <div className="flex-1 space-y-3">
           <div className="flex flex-wrap items-center gap-2">
-            <h1 className="text-3xl font-bold">{tutor.name}</h1>
+            <h1 className="font-serif text-3xl font-bold">{tutor.name}</h1>
             <VerificationBadge status={tutor.approved ?? true} />
           </div>
           <div className="flex flex-wrap items-center gap-3 text-sm">
@@ -85,18 +85,7 @@ export default async function TutorPage({
           </h2>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-            {mockSlots.map((s) => (
-              <Button key={s} variant="outline" className="justify-center">
-                {s}
-              </Button>
-            ))}
-          </div>
-          <div className="mt-6 flex justify-end">
-            <Button variant="cool" size="lg">
-              Book session
-            </Button>
-          </div>
+          <BookingSchedule slots={mockSlots} />
         </CardContent>
       </Card>
     </div>

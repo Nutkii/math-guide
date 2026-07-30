@@ -1,15 +1,10 @@
 import { getTranslations } from "next-intl/server";
-import { Plus, Search, ChevronRight, BookOpen } from "lucide-react";
+import { Plus, Search, ChevronRight } from "lucide-react";
 import { Link } from "@/i18n/routing";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ProblemCard } from "@/components/problem/problem-card";
-import {
-  getProblemsDB,
-  getChapterDB,
-  getBookLiteBySlugDB,
-  getChaptersOverviewDB,
-} from "@/lib/db-data";
+import { getProblemsDB, getChapterDB, getChaptersOverviewDB } from "@/lib/db-data";
 
 type Params = { locale: string };
 type Search = { chapterId?: string };
@@ -40,31 +35,16 @@ export default async function ProblemsListPage({
 
   if (chapterId) {
     const chapter = await getChapterDB(chapterId);
-    const book = chapter ? await getBookLiteBySlugDB(chapter.bookSlug) : null;
     const problems = await getProblemsDB({ chapterId });
     const chapterTitle = chapter
       ? locale === "ka"
         ? chapter.titleKa
         : chapter.titleEn
       : "";
-    const bookTitle = book
-      ? locale === "ka"
-        ? book.titleKa
-        : book.titleEn
-      : "";
 
     return (
       <div className="container py-12">
         {header}
-        {book && (
-          <Link
-            href={`/books/${book.slug}`}
-            className="mb-2 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-primary"
-          >
-            <BookOpen className="h-3.5 w-3.5" />
-            {bookTitle}
-          </Link>
-        )}
         <h2 className="mb-6 text-xl font-semibold">{chapterTitle}</h2>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {problems.map((p) => (

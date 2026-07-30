@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 import { useTranslations } from "next-intl";
-import { ImagePlus, Send, X } from "lucide-react";
+import { FilePlus2, ImagePlus, Send, X } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -62,9 +62,15 @@ export default function NewProblemPage() {
 
   return (
     <div className="container max-w-3xl py-12">
-      <header className="mb-8">
-        <h1 className="text-3xl font-bold md:text-4xl">{t("uploadTitle")}</h1>
-        <p className="mt-2 text-muted-foreground">
+      <header className="mb-8 space-y-3">
+        <div className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-background/60 px-3 py-1 font-mono text-xs font-semibold uppercase tracking-wide text-primary backdrop-blur">
+          <FilePlus2 className="h-3 w-3" />
+          Homework
+        </div>
+        <h1 className="text-balance font-serif text-3xl font-bold tracking-tight md:text-4xl">
+          <span className="text-gradient-cool">{t("uploadTitle")}</span>
+        </h1>
+        <p className="text-muted-foreground">
           Use LaTeX with <code className="text-primary">$...$</code> for math.
         </p>
       </header>
@@ -92,12 +98,14 @@ export default function NewProblemPage() {
                 <TabsTrigger value="preview">{t("preview")}</TabsTrigger>
               </TabsList>
               <TabsContent value="write">
-                <Textarea
-                  value={statement}
-                  onChange={(e) => setStatement(e.target.value)}
-                  placeholder={t("writeStatement")}
-                  className="min-h-[140px] font-mono text-sm"
-                />
+                <div className="rule-margin bg-rule-paper relative overflow-hidden rounded-md border border-border">
+                  <Textarea
+                    value={statement}
+                    onChange={(e) => setStatement(e.target.value)}
+                    placeholder={t("writeStatement")}
+                    className="min-h-[140px] resize-none rounded-none border-0 bg-transparent pl-14 font-mono text-sm focus-visible:ring-0 focus-visible:ring-offset-0"
+                  />
+                </div>
               </TabsContent>
               <TabsContent value="preview">
                 <div className="min-h-[140px] rounded-md border border-dashed border-border bg-muted/30 p-4">
@@ -130,14 +138,14 @@ export default function NewProblemPage() {
                     <img
                       src={url}
                       alt=""
-                      className="h-20 w-20 rounded border object-cover"
+                      className="h-20 w-20 rounded-lg object-cover shadow-sm ring-1 ring-border"
                     />
                     <button
                       type="button"
                       onClick={() => removeImage(i)}
-                      className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-destructive text-[10px] text-white"
+                      className="absolute -right-1.5 -top-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-destructive text-white shadow-sm"
                     >
-                      <X className="h-2.5 w-2.5" />
+                      <X className="h-3 w-3" />
                     </button>
                   </div>
                 ))}
@@ -157,12 +165,14 @@ export default function NewProblemPage() {
                 <TabsTrigger value="preview">{t("preview")}</TabsTrigger>
               </TabsList>
               <TabsContent value="write">
-                <Textarea
-                  value={solution}
-                  onChange={(e) => setSolution(e.target.value)}
-                  placeholder={t("writeSolution")}
-                  className="min-h-[200px] font-mono text-sm"
-                />
+                <div className="rule-margin bg-rule-paper relative overflow-hidden rounded-md border border-border">
+                  <Textarea
+                    value={solution}
+                    onChange={(e) => setSolution(e.target.value)}
+                    placeholder={t("writeSolution")}
+                    className="min-h-[200px] resize-none rounded-none border-0 bg-transparent pl-14 font-mono text-sm focus-visible:ring-0 focus-visible:ring-offset-0"
+                  />
+                </div>
               </TabsContent>
               <TabsContent value="preview">
                 <div className="min-h-[200px] rounded-md border border-dashed border-border bg-muted/30 p-4">

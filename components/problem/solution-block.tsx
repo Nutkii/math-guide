@@ -20,10 +20,12 @@ export function SolutionBlock({ solution }: { solution: Solution }) {
     .slice(0, 2);
 
   return (
-    <Card>
+    <Card className="border-l-2 border-l-teal-500/50">
       <CardHeader className="flex flex-row items-center gap-3 space-y-0">
-        <Avatar className="h-9 w-9">
-          <AvatarFallback>{initials}</AvatarFallback>
+        <Avatar className="h-9 w-9 ring-1 ring-teal-500/20">
+          <AvatarFallback className="bg-gradient-to-br from-teal-500/15 to-emerald-500/15 text-primary">
+            {initials}
+          </AvatarFallback>
         </Avatar>
         <div>
           <p className="text-sm font-medium">{solution.authorName}</p>

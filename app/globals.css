@@ -77,6 +77,15 @@
     @apply bg-background text-foreground antialiased;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
+
+  /* Toggled on the landing page only (SlideDeck mount) — snaps to each
+     slide on the page's own scroll instead of a nested scrollbox, so
+     scrolling past the last slide into the footer behaves like any
+     other page. */
+  body.snap-deck {
+    scroll-snap-type: y proximity;
+    scroll-padding-top: 4rem;
+  }
 }
 
 @layer utilities {
@@ -101,6 +110,26 @@
       linear-gradient(hsl(var(--primary) / 0.08) 1px, transparent 1px),
       linear-gradient(90deg, hsl(var(--primary) / 0.08) 1px, transparent 1px);
     background-size: 22px 22px;
+  }
+
+  .bg-rule-paper {
+    background-image: repeating-linear-gradient(
+      to bottom,
+      transparent,
+      transparent 26px,
+      hsl(var(--primary) / 0.14) 27px
+    );
+    background-position: 0 6px;
+  }
+
+  .rule-margin::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 2.75rem;
+    width: 1px;
+    background: hsl(var(--redpen) / 0.3);
   }
 
   .animate-stamp {

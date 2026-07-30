@@ -4,7 +4,6 @@
     "tagline": "Georgian math companion"
   },
   "nav": {
-    "books": "Books",
     "problems": "Problems",
     "tutors": "Tutors",
     "pricing": "Pricing",
@@ -15,8 +14,8 @@
     "logout": "Log out"
   },
   "landing": {
-    "eyebrow": "Straight from your textbook",
-    "heroTitle": "Every math problem from your Georgian textbook, solved.",
+    "eyebrow": "Straight from the curriculum",
+    "heroTitle": "Your guide through Georgian math.",
     "heroSubtitle": "School-book solutions, AI step-by-step help, and live tutors — in one place.",
     "ctaPrimary": "Start free",
     "ctaSecondary": "Learn more",
@@ -31,13 +30,11 @@
       "hero": "Overview",
       "trust": "Why us",
       "features": "Features",
-      "books": "Library",
       "problems": "Problems",
       "tutors": "Tutors",
       "closing": "Start"
     },
     "sections": {
-      "books": "Textbooks",
       "problems": "Recently added problems",
       "tutors": "Live tutors, ready to book",
       "tutorsSubtitle": "Vetted teachers across every grade. Book by the hour, pay in GEL."
@@ -52,14 +49,14 @@
     },
     "closing": {
       "title": "Your next problem is already in the library.",
-      "subtitle": "Pick a book, find your chapter, get unstuck in minutes.",
+      "subtitle": "Pick a topic, find your chapter, get unstuck in minutes.",
       "cta": "Start free"
     },
     "features": {
       "title": "What you get",
       "library": {
         "title": "Full library",
-        "desc": "Every chapter of the Georgian curriculum, organized by book and problem number."
+        "desc": "Every chapter of the Georgian curriculum, organized by topic and problem number."
       },
       "ai": {
         "title": "AI explanations",
@@ -116,11 +113,6 @@
         ]
       }
     }
-  },
-  "books": {
-    "title": "Textbooks",
-    "subtitle": "Browse the Georgian math curriculum, grade by grade.",
-    "filterAll": "All grades"
   },
   "tutors": {
     "title": "Tutors",

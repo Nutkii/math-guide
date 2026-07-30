@@ -1,19 +1,23 @@
-﻿"use client";
+"use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { toast } from "sonner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
 import {
   Users,
   GraduationCap,
   FileText,
   BarChart3,
+  Images as ImagesIcon,
   Trash2,
   CheckCircle,
   XCircle,
+  RefreshCw,
 } from "lucide-react";
 
 interface User {
@@ -58,11 +62,32 @@ interface Metrics {
   totalProblems: number;
 }
 
+interface CloudinaryImage {
+  public_id: string;
+  secure_url: string;
+  created_at: string;
+  bytes: number;
+  format: string;
+}
+
 const ROLE_BADGE: Record<string, "default" | "secondary" | "destructive" | "cool" | "outline"> = {
   admin: "destructive",
   tutor: "cool",
   student: "secondary",
 };
+
+const DIFF_COLOR: Record<string, string> = {
+  easy: "text-emerald-500",
+  medium: "text-amber-500",
+  hard: "text-red-500",
+};
+
+const METRIC_TILES = [
+  { key: "totalUsers" as const, label: "Total Users", icon: Users },
+  { key: "totalTutors" as const, label: "Tutors", icon: GraduationCap },
+  { key: "pendingProblems" as const, label: "Pending Problems", icon: FileText },
+  { key: "totalProblems" as const, label: "Total Problems", icon: BarChart3 },
+];
 
 export default function AdminPage() {
   const [users, setUsers] = useState<User[]>([]);
@@ -71,6 +96,8 @@ export default function AdminPage() {
   const [metrics, setMetrics] = useState<Metrics | null>(null);
   const [rejectionReason, setRejectionReason] = useState<Record<string, string>>({});
   const [tutorRejectionReason, setTutorRejectionReason] = useState<Record<string, string>>({});
+  const [images, setImages] = useState<CloudinaryImage[]>([]);
+  const [imagesLoading, setImagesLoading] = useState(false);
 
   const fetchUsers = useCallback(async () => {
     const res = await fetch("/api/admin/users");
@@ -96,12 +123,27 @@ export default function AdminPage() {
     setMetrics(data);
   }, []);
 
+  const loadImages = useCallback(async () => {
+    setImagesLoading(true);
+    try {
+      const res = await fetch("/api/admin/images");
+      const data = await res.json();
+      if (res.ok) setImages(data.images);
+      else toast.error(data.error ?? "Failed to load images");
+    } catch {
+      toast.error("Failed to load images");
+    } finally {
+      setImagesLoading(false);
+    }
+  }, []);
+
   const refresh = useCallback(() => {
     fetchUsers();
     fetchProblems();
     fetchTutors();
     fetchMetrics();
-  }, [fetchUsers, fetchProblems, fetchTutors, fetchMetrics]);
+    loadImages();
+  }, [fetchUsers, fetchProblems, fetchTutors, fetchMetrics, loadImages]);
 
   useEffect(() => {
     refresh();
@@ -144,65 +186,81 @@ export default function AdminPage() {
     fetchTutors();
   }
 
-  const DIFF_COLOR: Record<string, string> = {
-    easy: "text-emerald-500",
-    medium: "text-amber-500",
-    hard: "text-red-500",
-  };
+  async function deleteImage(publicId: string) {
+    try {
+      const res = await fetch(`/api/admin/images?publicId=${encodeURIComponent(publicId)}`, {
+        method: "DELETE",
+      });
+      if (res.ok) {
+        setImages((prev) => prev.filter((img) => img.public_id !== publicId));
+        toast.success("Image deleted");
+      } else {
+        toast.error("Delete failed");
+      }
+    } catch {
+      toast.error("Delete failed");
+    }
+  }
 
   return (
-    <div className="container max-w-7xl py-10 space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold">Admin Panel</h1>
-        <p className="text-muted-foreground text-sm mt-1">
+    <div className="container max-w-7xl space-y-8 py-10">
+      <header className="space-y-2">
+        <div className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-background/60 px-3 py-1 font-mono text-xs font-semibold uppercase tracking-wide text-primary backdrop-blur">
+          Gradebook
+        </div>
+        <h1 className="text-balance font-serif text-3xl font-bold tracking-tight md:text-4xl">
+          <span className="text-gradient-cool">Admin Panel</span>
+        </h1>
+        <p className="text-sm text-muted-foreground">
           Manage users, tutors, problems, and platform health.
         </p>
-      </div>
+      </header>
 
       <Tabs defaultValue="metrics">
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="metrics" className="flex items-center gap-1">
+        <TabsList className="grid w-full grid-cols-5">
+          <TabsTrigger value="metrics" className="flex items-center gap-1.5">
             <BarChart3 className="h-4 w-4" /> Metrics
           </TabsTrigger>
-          <TabsTrigger value="users" className="flex items-center gap-1">
+          <TabsTrigger value="users" className="flex items-center gap-1.5">
             <Users className="h-4 w-4" /> Users
             {users.length > 0 && (
-              <span className="ml-1 rounded-full bg-muted px-1.5 py-0 text-xs">{users.length}</span>
+              <span className="ml-0.5 rounded-full bg-muted px-1.5 py-0 text-xs">{users.length}</span>
             )}
           </TabsTrigger>
-          <TabsTrigger value="tutors" className="flex items-center gap-1">
+          <TabsTrigger value="tutors" className="flex items-center gap-1.5">
             <GraduationCap className="h-4 w-4" /> Tutors
             {tutors.length > 0 && (
-              <span className="ml-1 rounded-full bg-muted px-1.5 py-0 text-xs">{tutors.length}</span>
+              <span className="ml-0.5 rounded-full bg-muted px-1.5 py-0 text-xs">{tutors.length}</span>
             )}
           </TabsTrigger>
-          <TabsTrigger value="problems" className="flex items-center gap-1">
+          <TabsTrigger value="problems" className="flex items-center gap-1.5">
             <FileText className="h-4 w-4" /> Problems
             {problems.length > 0 && (
-              <span className="ml-1 rounded-full bg-destructive/80 text-destructive-foreground px-1.5 py-0 text-xs">
+              <span className="ml-0.5 rounded-full bg-destructive/80 px-1.5 py-0 text-xs text-destructive-foreground">
                 {problems.length}
               </span>
             )}
+          </TabsTrigger>
+          <TabsTrigger value="images" className="flex items-center gap-1.5">
+            <ImagesIcon className="h-4 w-4" /> Images
           </TabsTrigger>
         </TabsList>
 
         {/* METRICS */}
         <TabsContent value="metrics" className="mt-6">
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {[
-              { label: "Total Users", value: metrics?.totalUsers },
-              { label: "Tutors", value: metrics?.totalTutors },
-              { label: "Pending Problems", value: metrics?.pendingProblems },
-              { label: "Total Problems", value: metrics?.totalProblems },
-            ].map((m) => (
-              <Card key={m.label}>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-sm font-medium text-muted-foreground">
-                    {m.label}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-3xl font-bold text-primary">{m.value ?? "—"}</div>
+            {METRIC_TILES.map(({ key, label, icon: Icon }) => (
+              <Card key={key}>
+                <CardContent className="flex items-center gap-4 p-5">
+                  <div className="grid h-11 w-11 shrink-0 place-items-center rounded-lg bg-gradient-to-br from-teal-500/15 to-emerald-500/15 text-primary ring-1 ring-inset ring-teal-500/20">
+                    <Icon className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                      {label}
+                    </p>
+                    <p className="text-2xl font-bold text-foreground">{metrics?.[key] ?? "—"}</p>
+                  </div>
                 </CardContent>
               </Card>
             ))}
@@ -213,13 +271,13 @@ export default function AdminPage() {
         <TabsContent value="users" className="mt-6">
           <Card>
             <CardHeader>
-              <CardTitle>All Users ({users.length})</CardTitle>
+              <CardTitle className="font-serif">All Users ({users.length})</CardTitle>
             </CardHeader>
             <CardContent className="p-0">
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b text-left text-muted-foreground">
+                    <tr className="border-b border-dashed border-border text-left font-mono text-xs uppercase tracking-wide text-muted-foreground">
                       <th className="px-4 py-3">Name</th>
                       <th className="px-4 py-3">Email</th>
                       <th className="px-4 py-3">Role</th>
@@ -227,9 +285,9 @@ export default function AdminPage() {
                       <th className="px-4 py-3">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y">
+                  <tbody className="divide-y divide-dashed divide-border">
                     {users.map((u) => (
-                      <tr key={u._id} className="hover:bg-muted/30 transition-colors">
+                      <tr key={u._id} className="transition-colors hover:bg-muted/30">
                         <td className="px-4 py-3 font-medium">{u.name}</td>
                         <td className="px-4 py-3 text-muted-foreground">{u.email}</td>
                         <td className="px-4 py-3">
@@ -239,7 +297,7 @@ export default function AdminPage() {
                           {new Date(u.createdAt).toLocaleDateString()}
                         </td>
                         <td className="px-4 py-3">
-                          <div className="flex items-center gap-1 flex-wrap">
+                          <div className="flex flex-wrap items-center gap-1">
                             {(["student", "tutor", "admin"] as const)
                               .filter((r) => r !== u.role)
                               .map((r) => (
@@ -279,13 +337,13 @@ export default function AdminPage() {
         <TabsContent value="tutors" className="mt-6">
           <Card>
             <CardHeader>
-              <CardTitle>Tutors ({tutors.length})</CardTitle>
+              <CardTitle className="font-serif">Tutors ({tutors.length})</CardTitle>
             </CardHeader>
             <CardContent className="p-0">
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b text-left text-muted-foreground">
+                    <tr className="border-b border-dashed border-border text-left font-mono text-xs uppercase tracking-wide text-muted-foreground">
                       <th className="px-4 py-3">Name</th>
                       <th className="px-4 py-3">Email</th>
                       <th className="px-4 py-3">Status</th>
@@ -295,11 +353,11 @@ export default function AdminPage() {
                       <th className="px-4 py-3">Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y">
+                  <tbody className="divide-y divide-dashed divide-border">
                     {tutors.map((t) => {
                       const rejected = !t.profile?.approved && !!t.profile?.rejectionReason;
                       return (
-                        <tr key={t._id} className="hover:bg-muted/30 transition-colors align-top">
+                        <tr key={t._id} className="align-top transition-colors hover:bg-muted/30">
                           <td className="px-4 py-3 font-medium">{t.name}</td>
                           <td className="px-4 py-3 text-muted-foreground">{t.email}</td>
                           <td className="px-4 py-3">
@@ -334,7 +392,7 @@ export default function AdminPage() {
                             {t.profile?.subjects.join(", ") || "—"}
                           </td>
                           <td
-                            className="px-4 py-3 text-muted-foreground max-w-[220px]"
+                            className="max-w-[220px] px-4 py-3 text-muted-foreground"
                             title={t.profile?.experience}
                           >
                             {t.profile?.yearsExperience !== undefined && (
@@ -356,30 +414,30 @@ export default function AdminPage() {
                                   <Button
                                     size="sm"
                                     variant="outline"
-                                    className="h-7 text-xs text-emerald-500 border-emerald-500/40 hover:bg-emerald-500/10"
+                                    className="h-7 rounded-md border-dashed border-emerald-500/50 font-mono text-[11px] uppercase tracking-wide text-emerald-600 hover:bg-emerald-500/10 dark:text-emerald-400"
                                     onClick={() => setTutorProfileApproved(t._id, true)}
                                   >
-                                    <CheckCircle className="h-3 w-3 mr-1" /> Approve
+                                    <CheckCircle className="mr-1 h-3 w-3" /> Approve
                                   </Button>
                                 )}
                                 {t.profile && !t.profile.approved && (
                                   <Button
                                     size="sm"
                                     variant="outline"
-                                    className="h-7 text-xs text-destructive border-destructive/40 hover:bg-destructive/10"
+                                    className="h-7 rounded-md border-dashed border-destructive/50 font-mono text-[11px] uppercase tracking-wide text-destructive hover:bg-destructive/10"
                                     onClick={() => setTutorProfileApproved(t._id, false)}
                                   >
-                                    <XCircle className="h-3 w-3 mr-1" /> Reject
+                                    <XCircle className="mr-1 h-3 w-3" /> Reject
                                   </Button>
                                 )}
                                 {t.profile?.approved && (
                                   <Button
                                     size="sm"
                                     variant="outline"
-                                    className="h-7 text-xs text-destructive border-destructive/40 hover:bg-destructive/10"
+                                    className="h-7 rounded-md border-dashed border-destructive/50 font-mono text-[11px] uppercase tracking-wide text-destructive hover:bg-destructive/10"
                                     onClick={() => setTutorProfileApproved(t._id, false)}
                                   >
-                                    <XCircle className="h-3 w-3 mr-1" /> Revoke
+                                    <XCircle className="mr-1 h-3 w-3" /> Revoke
                                   </Button>
                                 )}
                                 <Button
@@ -423,15 +481,21 @@ export default function AdminPage() {
         <TabsContent value="problems" className="mt-6">
           <Card>
             <CardHeader>
-              <CardTitle>Pending Problems ({problems.length})</CardTitle>
+              <CardTitle className="font-serif">Pending Problems ({problems.length})</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {problems.map((p) => (
-                  <div key={p._id} className="rounded-lg border p-4 space-y-3">
+                {problems.map((p, i) => (
+                  <div
+                    key={p._id}
+                    className={cn(
+                      "space-y-3 rounded-lg border border-dashed border-border bg-card/60 p-4 shadow-sm transition-transform hover:-translate-y-0.5 hover:shadow-md",
+                      i % 2 === 0 ? "sm:-rotate-[0.3deg]" : "sm:rotate-[0.3deg]",
+                    )}
+                  >
                     <div>
-                      <div className="flex items-center gap-2 mb-1 flex-wrap">
-                        <span className="font-medium text-sm">#{p.number}</span>
+                      <div className="mb-1 flex flex-wrap items-center gap-2">
+                        <span className="font-mono text-sm font-medium">#{p.number}</span>
                         <Badge variant="outline" className="text-xs">
                           {p.bookSlug}
                         </Badge>
@@ -442,7 +506,7 @@ export default function AdminPage() {
                           <span className="text-xs text-muted-foreground">by {p.authorName}</span>
                         )}
                       </div>
-                      <p className="text-sm text-muted-foreground line-clamp-3">{p.statementKa}</p>
+                      <p className="line-clamp-3 text-sm text-muted-foreground">{p.statementKa}</p>
                     </div>
                     <div className="flex items-center gap-2">
                       <Input
@@ -455,18 +519,17 @@ export default function AdminPage() {
                       />
                       <Button
                         size="sm"
-                        className="h-8 shrink-0 bg-emerald-600 hover:bg-emerald-700 text-white"
+                        className="h-8 shrink-0 rounded-md border-2 border-dashed border-emerald-600 bg-transparent font-mono text-xs uppercase tracking-wide text-emerald-600 hover:bg-emerald-500/10 dark:text-emerald-400"
                         onClick={() => reviewProblem(p._id, "approved")}
                       >
-                        <CheckCircle className="h-3 w-3 mr-1" /> Approve
+                        <CheckCircle className="mr-1 h-3 w-3" /> Approve
                       </Button>
                       <Button
                         size="sm"
-                        variant="destructive"
-                        className="h-8 shrink-0"
+                        className="h-8 shrink-0 rounded-md border-2 border-dashed border-destructive bg-transparent font-mono text-xs uppercase tracking-wide text-destructive hover:bg-destructive/10"
                         onClick={() => reviewProblem(p._id, "rejected")}
                       >
-                        <XCircle className="h-3 w-3 mr-1" /> Reject
+                        <XCircle className="mr-1 h-3 w-3" /> Reject
                       </Button>
                     </div>
                   </div>
@@ -475,6 +538,54 @@ export default function AdminPage() {
                   <p className="py-8 text-center text-muted-foreground">No pending problems.</p>
                 )}
               </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* IMAGES */}
+        <TabsContent value="images" className="mt-6">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0">
+              <CardTitle className="font-serif">Uploaded Images ({images.length})</CardTitle>
+              <Button variant="outline" size="sm" onClick={loadImages} disabled={imagesLoading}>
+                <RefreshCw className={cn("h-4 w-4", imagesLoading && "animate-spin")} />
+                Refresh
+              </Button>
+            </CardHeader>
+            <CardContent>
+              {imagesLoading ? (
+                <p className="text-muted-foreground">Loading…</p>
+              ) : images.length === 0 ? (
+                <p className="py-8 text-center text-muted-foreground">No images uploaded yet.</p>
+              ) : (
+                <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+                  {images.map((img) => (
+                    <div
+                      key={img.public_id}
+                      className="group relative overflow-hidden rounded-lg border border-border"
+                    >
+                      <img src={img.secure_url} alt="" className="h-40 w-full object-cover" />
+                      <div className="p-2">
+                        <p className="truncate text-xs text-muted-foreground">{img.public_id}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {(img.bytes / 1024).toFixed(1)} KB · {img.format.toUpperCase()}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          {new Date(img.created_at).toLocaleDateString()}
+                        </p>
+                      </div>
+                      <Button
+                        variant="destructive"
+                        size="icon"
+                        className="absolute right-2 top-2 h-7 w-7 opacity-0 transition-opacity group-hover:opacity-100"
+                        onClick={() => deleteImage(img.public_id)}
+                      >
+                        <Trash2 className="h-3.5 w-3.5" />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              )}
             </CardContent>
           </Card>
         </TabsContent>

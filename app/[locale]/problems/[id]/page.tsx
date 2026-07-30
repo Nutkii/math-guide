@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { Sparkles, BookOpen } from "lucide-react";
+import { Sparkles, Layers } from "lucide-react";
 import { Link } from "@/i18n/routing";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -10,7 +10,7 @@ import { MixedText } from "@/components/problem/math-render";
 import { SolutionBlock } from "@/components/problem/solution-block";
 import {
   getProblemByIdDB,
-  getBookLiteBySlugDB,
+  getChapterDB,
   getSolutionsForProblemDB,
 } from "@/lib/db-data";
 
@@ -28,26 +28,26 @@ export default async function ProblemPage({
   const t = await getTranslations({ locale, namespace: "problem" });
   const tc = await getTranslations({ locale, namespace: "common" });
 
-  const book = await getBookLiteBySlugDB(problem.bookSlug);
+  const chapter = await getChapterDB(problem.chapterId);
   const sols = await getSolutionsForProblemDB(problem.id);
   const statement = locale === "ka" ? problem.statementKa : problem.statementEn;
-  const bookTitle = book
+  const topicTitle = chapter
     ? locale === "ka"
-      ? book.titleKa
-      : book.titleEn
+      ? chapter.titleKa
+      : chapter.titleEn
     : "";
 
   return (
     <div className="container max-w-3xl py-12 space-y-8">
       <header className="space-y-3">
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          {book && (
+          {chapter && (
             <Link
-              href={`/books/${book.slug}`}
+              href={`/problems?chapterId=${chapter.id}`}
               className="inline-flex items-center gap-1 hover:text-primary"
             >
-              <BookOpen className="h-3.5 w-3.5" />
-              {bookTitle}
+              <Layers className="h-3.5 w-3.5" />
+              {topicTitle}
             </Link>
           )}
         </div>

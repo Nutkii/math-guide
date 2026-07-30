@@ -1,21 +1,3 @@
-export type Book = {
-  slug: string;
-  titleKa: string;
-  titleEn: string;
-  grade: number;
-  publisher: string;
-  cover: string;
-  chapters: Chapter[];
-};
-
-export type Chapter = {
-  id: string;
-  number: number;
-  titleKa: string;
-  titleEn: string;
-  problemCount: number;
-};
-
 export type Problem = {
   id: string;
   bookSlug: string;
@@ -25,7 +7,7 @@ export type Problem = {
   statementEn: string;
   difficulty: "easy" | "medium" | "hard";
   solutionCount: number;
-  authorName: string;
+  authorName?: string;
 };
 
 export type Solution = {
@@ -50,119 +32,6 @@ export type Tutor = {
   approved?: boolean;
 };
 
-const coolCovers = [
-  "linear-gradient(135deg, hsl(180 70% 45%), hsl(160 65% 50%))",
-  "linear-gradient(135deg, hsl(200 75% 55%), hsl(180 60% 45%))",
-  "linear-gradient(135deg, hsl(160 60% 45%), hsl(190 70% 55%))",
-  "linear-gradient(135deg, hsl(210 70% 50%), hsl(170 65% 50%))",
-];
-
-export const books: Book[] = [
-  {
-    slug: "algebra-9",
-    titleKa: "ალგებრა 9",
-    titleEn: "Algebra 9",
-    grade: 9,
-    publisher: "Klett",
-    cover: coolCovers[0],
-    chapters: [
-      {
-        id: "alg9-c1",
-        number: 1,
-        titleKa: "ხარისხები და ფესვები",
-        titleEn: "Powers and Roots",
-        problemCount: 42,
-      },
-      {
-        id: "alg9-c2",
-        number: 2,
-        titleKa: "კვადრატული განტოლებები",
-        titleEn: "Quadratic Equations",
-        problemCount: 58,
-      },
-      {
-        id: "alg9-c3",
-        number: 3,
-        titleKa: "ფუნქციები",
-        titleEn: "Functions",
-        problemCount: 36,
-      },
-    ],
-  },
-  {
-    slug: "geometry-10",
-    titleKa: "გეომეტრია 10",
-    titleEn: "Geometry 10",
-    grade: 10,
-    publisher: "Intelekti",
-    cover: coolCovers[1],
-    chapters: [
-      {
-        id: "geo10-c1",
-        number: 1,
-        titleKa: "მსგავსი სამკუთხედები",
-        titleEn: "Similar Triangles",
-        problemCount: 28,
-      },
-      {
-        id: "geo10-c2",
-        number: 2,
-        titleKa: "წრე და მხები",
-        titleEn: "Circles and Tangents",
-        problemCount: 34,
-      },
-    ],
-  },
-  {
-    slug: "algebra-11",
-    titleKa: "ალგებრა 11",
-    titleEn: "Algebra 11",
-    grade: 11,
-    publisher: "Bakur Sulakauri",
-    cover: coolCovers[2],
-    chapters: [
-      {
-        id: "alg11-c1",
-        number: 1,
-        titleKa: "ლოგარითმები",
-        titleEn: "Logarithms",
-        problemCount: 45,
-      },
-      {
-        id: "alg11-c2",
-        number: 2,
-        titleKa: "ტრიგონომეტრია",
-        titleEn: "Trigonometry",
-        problemCount: 62,
-      },
-    ],
-  },
-  {
-    slug: "calculus-12",
-    titleKa: "მათემატიკის ანალიზი 12",
-    titleEn: "Calculus 12",
-    grade: 12,
-    publisher: "Klett",
-    cover: coolCovers[3],
-    chapters: [
-      {
-        id: "cal12-c1",
-        number: 1,
-        titleKa: "ზღვრები",
-        titleEn: "Limits",
-        problemCount: 30,
-      },
-      {
-        id: "cal12-c2",
-        number: 2,
-        titleKa: "წარმოებული",
-        titleEn: "Derivatives",
-        problemCount: 48,
-      },
-    ],
-  },
-];
-
 export const problems: Problem[] = [
   {
     id: "p1",
@@ -173,7 +42,6 @@ export const problems: Problem[] = [
     statementEn: "Solve the equation: $x^2 - 5x + 6 = 0$",
     difficulty: "easy",
     solutionCount: 3,
-    authorName: "ნინო ჯავახიშვილი",
   },
   {
     id: "p2",
@@ -186,7 +54,6 @@ export const problems: Problem[] = [
       "Find the value of $k$ for which the equation $x^2 + kx + 9 = 0$ has exactly one root.",
     difficulty: "medium",
     solutionCount: 2,
-    authorName: "გიორგი მაჭარაშვილი",
   },
   {
     id: "p3",
@@ -199,7 +66,6 @@ export const problems: Problem[] = [
       "In triangle $ABC$, $AB = 6$, $BC = 8$, $AC = 10$. Find its area.",
     difficulty: "easy",
     solutionCount: 4,
-    authorName: "თამარ ბერიძე",
   },
   {
     id: "p4",
@@ -210,7 +76,6 @@ export const problems: Problem[] = [
     statementEn: "Solve: $\\log_2(x^2 - 1) = 3$",
     difficulty: "medium",
     solutionCount: 1,
-    authorName: "ლუკა კვირიკაშვილი",
   },
   {
     id: "p5",
@@ -221,7 +86,6 @@ export const problems: Problem[] = [
     statementEn: "Find the derivative: $f(x) = x^3 \\sin(x)$",
     difficulty: "medium",
     solutionCount: 2,
-    authorName: "ანა გელაშვილი",
   },
   {
     id: "p6",
@@ -232,7 +96,6 @@ export const problems: Problem[] = [
     statementEn: "Evaluate the limit: $\\lim_{x \\to 0} \\frac{\\sin(3x)}{x}$",
     difficulty: "hard",
     solutionCount: 1,
-    authorName: "დათო ლომიძე",
   },
 ];
 
@@ -358,10 +221,6 @@ export const tutors: Tutor[] = [
     avatarSeed: "beka",
   },
 ];
-
-export function getBookBySlug(slug: string) {
-  return books.find((b) => b.slug === slug);
-}
 
 export function getProblemById(id: string) {
   return problems.find((p) => p.id === id);

@@ -133,7 +133,6 @@ async function main() {
       statementKa: "ამოხსენით განტოლება: $x^2 - 5x + 6 = 0$",
       statementEn: "Solve the equation: $x^2 - 5x + 6 = 0$",
       difficulty: "easy",
-      authorName: "ნინო ჯავახიშვილი",
       status: "approved",
     },
     {
@@ -144,7 +143,6 @@ async function main() {
       statementKa: "იპოვეთ $k$-ს მნიშვნელობა, რომლისთვისაც განტოლებას $x^2 + kx + 9 = 0$ აქვს ერთადერთი ფესვი.",
       statementEn: "Find the value of $k$ for which the equation $x^2 + kx + 9 = 0$ has exactly one root.",
       difficulty: "medium",
-      authorName: "გიორგი მაჭარაშვილი",
       status: "approved",
     },
     {
@@ -155,7 +153,6 @@ async function main() {
       statementKa: "სამკუთხედი $ABC$-ში გვაქვს $AB = 6$, $BC = 8$, $AC = 10$. იპოვეთ მისი ფართობი.",
       statementEn: "In triangle $ABC$, $AB = 6$, $BC = 8$, $AC = 10$. Find its area.",
       difficulty: "easy",
-      authorName: "თამარ ბერიძე",
       status: "approved",
     },
     {
@@ -166,7 +163,6 @@ async function main() {
       statementKa: "ამოხსენით: $\\log_2(x^2 - 1) = 3$",
       statementEn: "Solve: $\\log_2(x^2 - 1) = 3$",
       difficulty: "medium",
-      authorName: "ლუკა კვირიკაშვილი",
       status: "approved",
     },
     {
@@ -177,7 +173,6 @@ async function main() {
       statementKa: "იპოვეთ წარმოებული: $f(x) = x^3 \\sin(x)$",
       statementEn: "Find the derivative: $f(x) = x^3 \\sin(x)$",
       difficulty: "medium",
-      authorName: "ანა გელაშვილი",
       status: "approved",
     },
     {
@@ -188,7 +183,6 @@ async function main() {
       statementKa: "გამოთვალეთ ზღვარი: $\\lim_{x \\to 0} \\frac{\\sin(3x)}{x}$",
       statementEn: "Evaluate the limit: $\\lim_{x \\to 0} \\frac{\\sin(3x)}{x}$",
       difficulty: "hard",
-      authorName: "დათო ლომიძე",
       status: "approved",
     },
   ]);

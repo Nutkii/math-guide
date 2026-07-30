@@ -8,7 +8,6 @@ import {
 } from "lucide-react";
 import { Link } from "@/i18n/routing";
 import { Button } from "@/components/ui/button";
-import { BookCover } from "@/components/book/book-cover";
 import { ProblemCard } from "@/components/problem/problem-card";
 import { TutorCard } from "@/components/tutor/tutor-card";
 import { NotebookDemo } from "@/components/landing/notebook-demo";
@@ -16,7 +15,7 @@ import { FeatureTab } from "@/components/landing/feature-tab";
 import { TrustStrip } from "@/components/landing/trust-strip";
 import { SlideDeck } from "@/components/landing/slide-deck";
 import { Slide } from "@/components/landing/slide";
-import { books, problems, tutors } from "@/lib/mock-data";
+import { problems, tutors } from "@/lib/mock-data";
 
 const featureIcons = [Library, Sparkles, GraduationCap, Users];
 const featureKeys = ["library", "ai", "tutors", "community"] as const;
@@ -29,7 +28,6 @@ export default function HomePage() {
     { id: "slide-hero", label: t("deck.hero") },
     { id: "slide-trust", label: t("deck.trust") },
     { id: "slide-features", label: t("deck.features") },
-    { id: "slide-books", label: t("deck.books") },
     { id: "slide-problems", label: t("deck.problems") },
     { id: "slide-tutors", label: t("deck.tutors") },
     { id: "slide-closing", label: t("deck.closing") },
@@ -99,30 +97,8 @@ export default function HomePage() {
         </div>
       </Slide>
 
-      {/* Slide 4 — Books preview */}
-      <Slide id="slide-books" index={3} total={total} eyebrow={t("deck.books")}>
-        <div className="reveal mb-8 flex items-end justify-between">
-          <h2 className="font-serif text-3xl font-bold md:text-4xl">
-            {t("sections.books")}
-          </h2>
-          <Button asChild variant="ghost" size="sm">
-            <Link href="/books">
-              {tc("viewAll")} <ArrowRight className="h-4 w-4" />
-            </Link>
-          </Button>
-        </div>
-        <div
-          className="reveal grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4"
-          style={{ transitionDelay: "150ms" }}
-        >
-          {books.map((b) => (
-            <BookCover key={b.slug} book={b} />
-          ))}
-        </div>
-      </Slide>
-
-      {/* Slide 5 — Problems preview */}
-      <Slide id="slide-problems" index={4} total={total} eyebrow={t("deck.problems")}>
+      {/* Slide 4 — Problems preview */}
+      <Slide id="slide-problems" index={3} total={total} eyebrow={t("deck.problems")}>
         <div className="reveal mb-8 flex items-end justify-between">
           <h2 className="font-serif text-3xl font-bold md:text-4xl">
             {t("sections.problems")}
@@ -143,8 +119,8 @@ export default function HomePage() {
         </div>
       </Slide>
 
-      {/* Slide 6 — Tutors preview */}
-      <Slide id="slide-tutors" index={5} total={total} eyebrow={t("deck.tutors")}>
+      {/* Slide 5 — Tutors preview */}
+      <Slide id="slide-tutors" index={4} total={total} eyebrow={t("deck.tutors")}>
         <div className="reveal mb-8 flex items-end justify-between gap-4">
           <div>
             <h2 className="font-serif text-3xl font-bold md:text-4xl">
@@ -170,10 +146,10 @@ export default function HomePage() {
         </div>
       </Slide>
 
-      {/* Slide 7 — Closing CTA */}
+      {/* Slide 6 — Closing CTA */}
       <Slide
         id="slide-closing"
-        index={6}
+        index={5}
         total={total}
         eyebrow={t("deck.closing")}
         ink

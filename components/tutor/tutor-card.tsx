@@ -49,7 +49,7 @@ export function TutorCard({ tutor }: { tutor: Tutor }) {
           </p>
           <div className="flex flex-wrap gap-1.5">
             {tutor.subjects.map((s) => (
-              <Badge key={s} variant="secondary" className="text-[10px]">
+              <Badge key={s} variant="cool" className="text-[10px]">
                 {s}
               </Badge>
             ))}

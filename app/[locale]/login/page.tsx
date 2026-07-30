@@ -59,10 +59,14 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="container flex min-h-[calc(100vh-160px)] items-center justify-center py-12">
+    <div className="container relative flex min-h-[calc(100vh-160px)] items-center justify-center py-12">
+      <div
+        aria-hidden
+        className="bg-grid-paper pointer-events-none absolute inset-0 opacity-[0.03] [mask-image:radial-gradient(ellipse_at_center,black,transparent_70%)]"
+      />
       <Card className="w-full max-w-md ring-glow">
         <CardHeader>
-          <CardTitle className="text-2xl text-gradient-cool">
+          <CardTitle className="font-serif text-2xl text-gradient-cool">
             {t("loginTitle")}
           </CardTitle>
         </CardHeader>
