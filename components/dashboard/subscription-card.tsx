@@ -2,22 +2,24 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
 type SubStatus = "active" | "trialing" | "cancelled" | "expired" | null;
 
-const STATUS_LABEL: Record<Exclude<SubStatus, null>, string> = {
-  active: "AI Pro",
-  trialing: "AI Pro (trial)",
-  cancelled: "Cancelled",
-  expired: "Expired",
-};
-
 export function SubscriptionCard({ status }: { status: SubStatus }) {
   const router = useRouter();
+  const t = useTranslations("subscription");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const STATUS_LABEL: Record<Exclude<SubStatus, null>, string> = {
+    active: t("statusActive"),
+    trialing: t("statusTrialing"),
+    cancelled: t("statusCancelled"),
+    expired: t("statusExpired"),
+  };
 
   const isSubscribed = status === "active" || status === "trialing";
 
@@ -27,10 +29,10 @@ export function SubscriptionCard({ status }: { status: SubStatus }) {
     try {
       const res = await fetch("/api/payments/flitt/checkout", { method: "POST" });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? "Failed to start checkout");
+      if (!res.ok) throw new Error(data.error ?? t("checkoutFailed"));
       window.location.href = data.checkoutUrl;
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Something went wrong");
+      setError(e instanceof Error ? e.message : t("genericError"));
       setLoading(false);
     }
   }
@@ -41,10 +43,10 @@ export function SubscriptionCard({ status }: { status: SubStatus }) {
     try {
       const res = await fetch("/api/payments/flitt/cancel", { method: "POST" });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? "Failed to cancel subscription");
+      if (!res.ok) throw new Error(data.error ?? t("cancelFailed"));
       router.refresh();
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Something went wrong");
+      setError(e instanceof Error ? e.message : t("genericError"));
     } finally {
       setLoading(false);
     }
@@ -52,7 +54,7 @@ export function SubscriptionCard({ status }: { status: SubStatus }) {
 
   return (
     <div className="flex flex-wrap items-center gap-2 text-sm">
-      <Badge variant="cool">{status ? STATUS_LABEL[status] : "Free plan"}</Badge>
+      <Badge variant="cool">{status ? STATUS_LABEL[status] : t("freePlan")}</Badge>
       {isSubscribed ? (
         <Button
           variant="link"
@@ -61,7 +63,7 @@ export function SubscriptionCard({ status }: { status: SubStatus }) {
           onClick={handleCancel}
           disabled={loading}
         >
-          Cancel subscription
+          {t("cancelBtn")}
         </Button>
       ) : (
         <Button
@@ -71,7 +73,7 @@ export function SubscriptionCard({ status }: { status: SubStatus }) {
           onClick={handleSubscribe}
           disabled={loading}
         >
-          Subscribe — 5 GEL/mo (first month free) →
+          {t("subscribeBtn")}
         </Button>
       )}
       {error && <span className="text-xs text-destructive">{error}</span>}

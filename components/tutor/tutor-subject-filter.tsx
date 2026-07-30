@@ -4,11 +4,13 @@ import { useMemo, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { TutorCard } from "@/components/tutor/tutor-card";
+import { subjectKey } from "@/lib/subject-labels";
 import type { Tutor } from "@/lib/mock-data";
 
 export function TutorSubjectFilter({ tutors }: { tutors: Tutor[] }) {
   const t = useTranslations("tutors");
-  const [subject, setSubject] = useState<string | null>(null);
+  const ts = useTranslations("subjects");
+  const [selected, setSelected] = useState<string[]>([]);
 
   const subjects = useMemo(
     () => Array.from(new Set(tutors.flatMap((tu) => tu.subjects))).sort(),
@@ -16,15 +18,23 @@ export function TutorSubjectFilter({ tutors }: { tutors: Tutor[] }) {
   );
 
   const filtered =
-    subject === null ? tutors : tutors.filter((tu) => tu.subjects.includes(subject));
+    selected.length === 0
+      ? tutors
+      : tutors.filter((tu) => tu.subjects.some((s) => selected.includes(s)));
+
+  function toggle(subject: string) {
+    setSelected((prev) =>
+      prev.includes(subject) ? prev.filter((s) => s !== subject) : [...prev, subject],
+    );
+  }
 
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap gap-2">
         <Button
           size="sm"
-          variant={subject === null ? "cool" : "outline"}
-          onClick={() => setSubject(null)}
+          variant={selected.length === 0 ? "cool" : "outline"}
+          onClick={() => setSelected([])}
         >
           {t("filterAll")}
         </Button>
@@ -32,10 +42,10 @@ export function TutorSubjectFilter({ tutors }: { tutors: Tutor[] }) {
           <Button
             key={s}
             size="sm"
-            variant={subject === s ? "cool" : "outline"}
-            onClick={() => setSubject(s)}
+            variant={selected.includes(s) ? "cool" : "outline"}
+            onClick={() => toggle(s)}
           >
-            {s}
+            {ts(subjectKey(s))}
           </Button>
         ))}
       </div>

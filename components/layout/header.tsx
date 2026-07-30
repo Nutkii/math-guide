@@ -12,6 +12,7 @@ export async function Header() {
 
   const links = [
     { href: "/problems", label: t("problems") },
+    { href: "/topics", label: t("topics") },
     { href: "/tutors", label: t("tutors") },
     { href: "/pricing", label: t("pricing") },
   ] as const;
@@ -42,7 +43,7 @@ export async function Header() {
           ))}
           {(session?.user as { role?: string })?.role === "admin" && (
             <Button asChild variant="ghost" size="sm" className="text-teal-500">
-              <Link href="/admin">Admin</Link>
+              <Link href="/admin">{t("admin")}</Link>
             </Button>
           )}
         </nav>

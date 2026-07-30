@@ -5,22 +5,24 @@
   },
   "nav": {
     "problems": "ამოცანები",
+    "topics": "თემები",
     "tutors": "რეპეტიტორები",
     "pricing": "ფასები",
     "chat": "AI ჩატი",
     "dashboard": "კაბინეტი",
     "login": "შესვლა",
     "register": "რეგისტრაცია",
-    "logout": "გასვლა"
+    "logout": "გასვლა",
+    "admin": "ადმინი"
   },
   "landing": {
     "eyebrow": "პირდაპირ სასწავლო პროგრამიდან",
     "heroTitle": "შენი გზამკვლევი მათემატიკაში",
-    "heroSubtitle": "ქართული სასკოლო წიგნების ამოხსნები, AI დახმარება და ცოცხალი რეპეტიტორები ერთ ადგილას.",
+    "heroSubtitle": "ქართული სასკოლო წიგნების ამოხსნები, AI დახმარება და გამოცდილი რეპეტიტორები ერთ ადგილას.",
     "ctaPrimary": "დაიწყე უფასოდ",
     "ctaSecondary": "გაიგე მეტი",
     "demo": {
-      "label": "ცოცხალი მაგალითი",
+      "label": "მაგალითი",
       "reference": "ალგებრა 9 · თავი 2 · №2.14",
       "factor": "ფაქტორიზაცია",
       "roots": "ფესვები",
@@ -41,10 +43,10 @@
     },
     "trust": {
       "title": "რატომ რჩებიან მოსწავლეები ჩვენთან",
-      "subtitle": "ზედმეტის გარეშე — სრული კურიკულუმი, დახმარება ჩიხში მოხვედრისას და ცოცხალი მასწავლებელი საჭიროებისას.",
+      "subtitle": "დამატებითი მასალების გარეშე — სრული კურიკულუმი, დახმარება ჩიხში მოხვედრისას და პირადი მასწავლებელი საჭიროებისას.",
       "curriculum": "სრული ქართული სასკოლო კურიკულუმი, VII–XII კლასები",
       "ai": "AI რეპეტიტორი — ხელმისაწვდომია 24/7",
-      "tutors": "გადამოწმებული ცოცხალი რეპეტიტორები",
+      "tutors": "გადამოწმებული რეპეტიტორები",
       "pricing": "₾5/თვე — პირველი თვე უფასოდ"
     },
     "closing": {
@@ -64,7 +66,7 @@
       },
       "tutors": {
         "title": "რეპეტიტორები",
-        "desc": "დაჯავშნე ცოცხალი გაკვეთილი გადამოწმებულ მასწავლებლებთან საათობრივი გადახდით."
+        "desc": "დაჯავშნე გაკვეთილი გადამოწმებულ მასწავლებლებთან საათობრივი გადახდით."
       },
       "community": {
         "title": "საზოგადოება",
@@ -105,7 +107,7 @@
       },
       "tutor": {
         "name": "რეპეტიტორი",
-        "desc": "ცოცხალი გაკვეთილი მასწავლებელთან",
+        "desc": "ინდივიდუალური გაკვეთილი მასწავლებელთან",
         "features": [
           "გადამოწმებული პროფესიონალები",
           "ვიდეო-ზარის ბმული",
@@ -119,6 +121,14 @@
     "subtitle": "დაჯავშნე გადამოწმებული ქართველი მათემატიკის რეპეტიტორი საათობრივად.",
     "filterAll": "ყველა საგანი"
   },
+  "subjects": {
+    "algebra": "ალგებრა",
+    "geometry": "გეომეტრია",
+    "calculus": "მათემატიკური ანალიზი",
+    "linearAlgebra": "წრფივი ალგებრა",
+    "numberTheory": "რიცხვთა თეორია",
+    "olympiad": "ოლიმპიადა"
+  },
   "problem": {
     "uploadTitle": "ატვირთე ამოცანა",
     "statement": "პირობა",
@@ -128,7 +138,32 @@
     "askAI": "AI-ს ჰკითხე",
     "uploadImage": "ჩასვი სურათი",
     "writeStatement": "ჩაწერე პირობა LaTeX/Markdown-ით",
-    "writeSolution": "ჩაწერე ამოხსნა"
+    "writeSolution": "ჩაწერე ამოხსნა",
+    "homework": "საშინაო დავალება",
+    "latexHint": "მათემატიკისთვის გამოიყენე LaTeX — $...$",
+    "book": "სახელმძღვანელო",
+    "problemNumberField": "ამოცანის ნომერი",
+    "write": "წერა",
+    "uploading": "იტვირთება…",
+    "toastImageUploaded": "სურათი აიტვირთა",
+    "toastUploadFailed": "ატვირთვა ვერ მოხერხდა",
+    "toastSubmitted": "გაიგზავნა განსახილველად",
+    "nothingYet": "ჯერ არაფერია…",
+    "solutionsHeading": "ამოხსნები ({count})",
+    "chapterField": "თავი",
+    "chapterPlaceholder": "აირჩიე თავი",
+    "toastMissingFields": "შეავსე თავი, ნომერი და პირობა",
+    "addSolution": "ამოხსნის დამატება",
+    "addSolutionPlaceholder": "ჩაწერე შენი ამოხსნა…",
+    "submitSolution": "ამოხსნის გამოქვეყნება",
+    "toastSolutionAdded": "ამოხსნა დაემატა",
+    "toastSolutionFailed": "ამოხსნის დამატება ვერ მოხერხდა",
+    "comments": "კომენტარები",
+    "addComment": "დაწერე კომენტარი…",
+    "postComment": "გაგზავნა",
+    "noComments": "კომენტარი ჯერ არ არის",
+    "pendingOwnerNotice": "შენი ამოცანა განხილვის პროცესშია — მხოლოდ შენ ხედავ მას ასე, სანამ ადმინი დაამტკიცებს.",
+    "rejectedOwnerNotice": "შენი ამოცანა უარყოფილია"
   },
   "auth": {
     "loginTitle": "შესვლა",
@@ -149,6 +184,7 @@
     "iAmA": "ვარ",
     "roleStudent": "მოსწავლე",
     "roleTutor": "რეპეტიტორი",
+    "roleAdmin": "ადმინი",
     "continue": "შემდეგი",
     "back": "უკან",
     "stepOf": "ნაბიჯი {current}/{total}",
@@ -169,6 +205,11 @@
     "subscription": "გამოწერა",
     "bookings": "ჯავშნები",
     "chats": "ჩატები",
+    "myUploadsDesc": "თვალი ადევნე შენ მიერ ატვირთულ ამოცანებს.",
+    "subscriptionDesc": "მართე შენი AI გეგმა.",
+    "bookingsDesc": "მომავალი გაკვეთილები რეპეტიტორებთან.",
+    "chatsDesc": "ბოლო AI საუბრები.",
+    "emptyState": "ცარიელია — დაიწყე გამოყენება",
     "tutorPendingNotice": "შენი რეპეტიტორის პროფილი დამოწმების მოლოდინშია. ადმინისტრატორი გადახედავს დეტალებს, სანამ სიაში გამოჩნდები.",
     "tutorRejectedNotice": "შენი რეპეტიტორის დამოწმება უარყოფილია"
   },
@@ -179,6 +220,130 @@
     "grade": "კლასი",
     "chapter": "თავი",
     "problemNumber": "ამოცანა №",
-    "viewAll": "ყველას ნახვა"
+    "viewAll": "ყველას ნახვა",
+    "allGrades": "ყველა კლასი",
+    "gradeShort": "{grade} კლასი",
+    "problemsCount": "{count} ამოცანა",
+    "backToDashboard": "კაბინეტში დაბრუნება",
+    "difficultyEasy": "მარტივი",
+    "difficultyMedium": "საშუალო",
+    "difficultyHard": "რთული"
+  },
+  "topics": {
+    "title": "თემები",
+    "subtitle": "აირჩიე თემა კლასის მიხედვით და გადადი შესაბამის ამოცანებზე."
+  },
+  "chat": {
+    "greeting": "გამარჯობა! დაგეხმარები ნებისმიერი მათემატიკური ამოცანის ნაბიჯ-ნაბიჯ ამოხსნაში. ჩასვი ამოცანა ან აღწერე, რაში გჭირდება დახმარება.",
+    "thinking": "ფიქრობს…",
+    "error": "დაფიქსირდა შეცდომა. კიდევ სცადე.",
+    "placeholder": "დასვი ნებისმიერი კითხვა…"
+  },
+  "subscription": {
+    "statusActive": "AI Pro",
+    "statusTrialing": "AI Pro (საცდელი)",
+    "statusCancelled": "გაუქმებული",
+    "statusExpired": "ვადაგასული",
+    "checkoutFailed": "გადახდის დაწყება ვერ მოხერხდა",
+    "genericError": "დაფიქსირდა შეცდომა",
+    "cancelFailed": "გამოწერის გაუქმება ვერ მოხერხდა",
+    "freePlan": "უფასო გეგმა",
+    "cancelBtn": "გამოწერის გაუქმება",
+    "subscribeBtn": "გამოწერა — ₾5/თვე (პირველი თვე უფასოდ) →",
+    "title": "გამოწერა",
+    "detailsUnavailable": "შენ ჯერ არ გაქვს აქტიური გამოწერა."
+  },
+  "bookings": {
+    "title": "ჯავშნები",
+    "empty": "დაჯავშნილი გაკვეთილი არ გაქვს.",
+    "findTutor": "რეპეტიტორის მოძებნა",
+    "calendarTitle": "კალენდარი",
+    "statusPendingPayment": "გადახდის მოლოდინში",
+    "statusConfirmed": "დადასტურებული",
+    "statusCompleted": "დასრულებული",
+    "statusReviewed": "შეფასებული",
+    "statusCancelled": "გაუქმებული"
+  },
+  "uploads": {
+    "title": "ჩემი ატვირთვები",
+    "empty": "ჯერ არაფერი გაქვს ატვირთული.",
+    "uploadNow": "ამოცანის ატვირთვა",
+    "statusPending": "განხილვაშია",
+    "statusApproved": "დამტკიცებული",
+    "statusRejected": "უარყოფილი"
+  },
+  "chats": {
+    "title": "ჩატები",
+    "empty": "საუბრების ისტორია ჯერ არ ინახება.",
+    "goToChat": "AI ჩატზე გადასვლა"
+  },
+  "tutor": {
+    "perHour": "/ საათში",
+    "reviews": "შეფასება",
+    "about": "შესახებ",
+    "availableSlots": "თავისუფალი დროები (მომდევნო 7 დღე)",
+    "selected": "არჩეულია:",
+    "pickSlot": "აირჩიე დრო ზემოთ",
+    "bookSession": "გაკვეთილის დაჯავშნა",
+    "verified": "დამოწმებული",
+    "pendingVerification": "დამოწმების მოლოდინში",
+    "rejected": "უარყოფილი",
+    "bookingSuccess": "დაიჯავშნა წარმატებით",
+    "bookingFailed": "დაჯავშნა ვერ მოხერხდა",
+    "viewBookings": "ჩემი ჯავშნების ნახვა",
+    "loginToBook": "გაკვეთილის დასაჯავშნად საჭიროა შესვლა",
+    "booking": "მიმდინარეობს…"
+  },
+  "footer": {
+    "explore": "სანავიგაციო",
+    "rights": "© {year} Math Guide. ყველა უფლება დაცულია."
+  },
+  "admin": {
+    "eyebrow": "ჟურნალი",
+    "title": "ადმინის პანელი",
+    "subtitle": "მართე მომხმარებლები, რეპეტიტორები, ამოცანები და პლატფორმის მდგომარეობა.",
+    "tabMetrics": "მეტრიკები",
+    "tabUsers": "მომხმარებლები",
+    "tabTutors": "რეპეტიტორები",
+    "tabProblems": "ამოცანები",
+    "tabImages": "სურათები",
+    "metricTotalUsers": "სულ მომხმარებელი",
+    "metricTutors": "რეპეტიტორი",
+    "metricPendingProblems": "განსახილველი ამოცანა",
+    "metricTotalProblems": "სულ ამოცანა",
+    "usersTitle": "ყველა მომხმარებელი",
+    "colName": "სახელი",
+    "colEmail": "ელფოსტა",
+    "colRole": "როლი",
+    "colJoined": "შემოერთდა",
+    "colActions": "მოქმედება",
+    "noUsers": "მომხმარებელი ვერ მოიძებნა.",
+    "tutorsTitle": "რეპეტიტორები",
+    "colStatus": "სტატუსი",
+    "colSubjects": "საგნები",
+    "colExperience": "გამოცდილება",
+    "colRate": "ტარიფი (GEL)",
+    "statusApproved": "დამტკიცებული",
+    "statusRejected": "უარყოფილი",
+    "statusPending": "მოლოდინში",
+    "noProfile": "პროფილი არ არის",
+    "years": "წელი",
+    "approve": "დამტკიცება",
+    "reject": "უარყოფა",
+    "revoke": "გაუქმება",
+    "demoteToStudent": "მოსწავლედ გადაყვანა",
+    "rejectionReasonPlaceholder": "უარყოფის მიზეზი (არასავალდებულო)",
+    "noTutors": "რეპეტიტორი ჯერ არ არის.",
+    "pendingProblemsTitle": "განსახილველი ამოცანები",
+    "by": "ავტორი:",
+    "noPendingProblems": "განსახილველი ამოცანა არ არის.",
+    "imagesTitle": "ატვირთული სურათები",
+    "refresh": "განახლება",
+    "loadingImages": "იტვირთება…",
+    "noImages": "სურათი ჯერ არ აიტვირთა.",
+    "confirmDeleteUser": "წაშალო ეს მომხმარებელი სამუდამოდ?",
+    "toastImagesLoadFailed": "სურათების ჩატვირთვა ვერ მოხერხდა",
+    "toastImageDeleted": "სურათი წაიშალა",
+    "toastDeleteFailed": "წაშლა ვერ მოხერხდა"
   }
 }

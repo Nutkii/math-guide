@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { streamText, convertToModelMessages, type UIMessage } from "ai";
 import { createOpenRouter } from "@openrouter/ai-sdk-provider";
 import { auth } from "@/auth";
-import { MATH_TUTOR_SYSTEM_PROMPT } from "@/lib/ai/system-prompt";
+import { buildSystemPrompt } from "@/lib/ai/system-prompt";
 
 export const maxDuration = 30;
 
@@ -15,11 +15,12 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { messages }: { messages: UIMessage[] } = await req.json();
+  const { messages, locale }: { messages: UIMessage[]; locale?: string } = await req.json();
+  const responseLocale = locale === "en" ? "en" : "ka";
 
   const result = streamText({
     model: openrouter(MODEL),
-    system: MATH_TUTOR_SYSTEM_PROMPT,
+    system: buildSystemPrompt(responseLocale),
     messages: await convertToModelMessages(messages),
   });
 

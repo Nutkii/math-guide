@@ -1,13 +1,17 @@
 import { Star } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { VerificationBadge } from "@/components/ui/verification-badge";
 import { formatGEL } from "@/lib/utils";
+import { subjectKey } from "@/lib/subject-labels";
 import type { Tutor } from "@/lib/mock-data";
 
 export function TutorCard({ tutor }: { tutor: Tutor }) {
+  const t = useTranslations("tutor");
+  const ts = useTranslations("subjects");
   const initials = tutor.name
     .split(" ")
     .map((n) => n[0])
@@ -40,7 +44,7 @@ export function TutorCard({ tutor }: { tutor: Tutor }) {
                 {formatGEL(tutor.hourlyRateGEL)}
               </p>
               <p className="text-[10px] uppercase tracking-wide text-muted-foreground">
-                / hr
+                {t("perHour")}
               </p>
             </div>
           </div>
@@ -50,7 +54,7 @@ export function TutorCard({ tutor }: { tutor: Tutor }) {
           <div className="flex flex-wrap gap-1.5">
             {tutor.subjects.map((s) => (
               <Badge key={s} variant="cool" className="text-[10px]">
-                {s}
+                {ts(subjectKey(s))}
               </Badge>
             ))}
           </div>

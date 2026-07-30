@@ -8,6 +8,7 @@ export type Problem = {
   difficulty: "easy" | "medium" | "hard";
   solutionCount: number;
   authorName?: string;
+  grade?: number;
 };
 
 export type Solution = {

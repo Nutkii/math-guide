@@ -17,5 +17,11 @@ export const createSolutionSchema = z.object({
   images: z.array(z.string().url()).optional(),
 });
 
+export const createCommentSchema = z.object({
+  solutionId: z.string().min(1),
+  content: z.string().min(1).max(2000),
+});
+
 export type CreateProblemInput = z.infer<typeof createProblemSchema>;
 export type CreateSolutionInput = z.infer<typeof createSolutionSchema>;
+export type CreateCommentInput = z.infer<typeof createCommentSchema>;

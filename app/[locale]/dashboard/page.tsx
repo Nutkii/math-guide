@@ -43,25 +43,25 @@ export default async function DashboardPage() {
     {
       key: "myUploads",
       icon: FileText,
-      desc: "Track problems you submitted.",
+      descKey: "myUploadsDesc",
       href: "/dashboard/uploads",
     },
     {
       key: "subscription",
       icon: CreditCard,
-      desc: "Manage your AI plan.",
+      descKey: "subscriptionDesc",
       href: "/dashboard/subscription",
     },
     {
       key: "bookings",
       icon: CalendarCheck,
-      desc: "Upcoming tutor sessions.",
+      descKey: "bookingsDesc",
       href: "/dashboard/bookings",
     },
     {
       key: "chats",
       icon: MessageSquare,
-      desc: "Recent AI conversations.",
+      descKey: "chatsDesc",
       href: "/dashboard/chats",
     },
   ] as const;
@@ -109,11 +109,11 @@ export default async function DashboardPage() {
                     <Icon className="h-5 w-5" />
                   </div>
                   <CardTitle>{t(tile.key)}</CardTitle>
-                  <CardDescription>{tile.desc}</CardDescription>
+                  <CardDescription>{t(tile.descKey)}</CardDescription>
                 </CardHeader>
                 <CardContent>
                   <p className="text-xs text-muted-foreground">
-                    Empty — start using the app
+                    {t("emptyState")}
                   </p>
                 </CardContent>
               </Card>

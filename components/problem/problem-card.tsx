@@ -13,6 +13,12 @@ const difficultyStyles = {
   hard: "bg-blue-500/15 text-blue-700 dark:text-blue-300 ring-1 ring-inset ring-blue-500/30",
 } as const;
 
+const difficultyLabelKeys = {
+  easy: "difficultyEasy",
+  medium: "difficultyMedium",
+  hard: "difficultyHard",
+} as const;
+
 function formatTopic(bookSlug: string) {
   return bookSlug
     .split("-")
@@ -35,10 +41,13 @@ export function ProblemCard({ problem }: { problem: Problem }) {
               {t("problemNumber")}
               {problem.number}
             </Badge>
+            {problem.grade && (
+              <Badge variant="outline">{t("gradeShort", { grade: problem.grade })}</Badge>
+            )}
             <span
               className={`rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase ${difficultyStyles[problem.difficulty]}`}
             >
-              {problem.difficulty}
+              {t(difficultyLabelKeys[problem.difficulty])}
             </span>
             <span className="ml-auto flex items-center gap-1 text-xs text-muted-foreground">
               <MessageSquare className="h-3 w-3" />

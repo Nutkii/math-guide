@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
 import { Sparkles, Send } from "lucide-react";
@@ -11,8 +11,10 @@ import { MixedText } from "@/components/problem/math-render";
 
 export default function ChatPage() {
   const t = useTranslations("nav");
+  const tChat = useTranslations("chat");
+  const locale = useLocale();
   const { messages, sendMessage, status } = useChat({
-    transport: new DefaultChatTransport({ api: "/api/chat" }),
+    transport: new DefaultChatTransport({ api: "/api/chat", body: { locale } }),
   });
   const [input, setInput] = useState("");
 
@@ -35,7 +37,7 @@ export default function ChatPage() {
       <div className="flex-1 space-y-3 overflow-y-auto rounded-xl border border-border/50 bg-card/40 p-4 backdrop-blur">
         {messages.length === 0 && (
           <p className="mr-auto max-w-[80%] rounded-2xl rounded-bl-sm bg-gradient-to-br from-teal-500/10 to-emerald-500/10 px-4 py-2.5 text-sm leading-relaxed ring-1 ring-inset ring-teal-500/20">
-            Hi! I can walk you through any math problem step by step. Paste your problem or describe what you&apos;re stuck on.
+            {tChat("greeting")}
           </p>
         )}
         {messages.map((m) => (
@@ -55,11 +57,11 @@ export default function ChatPage() {
           </div>
         ))}
         {(status === "submitted" || status === "streaming") && messages.at(-1)?.role === "user" && (
-          <p className="mr-auto text-xs text-muted-foreground">Thinking…</p>
+          <p className="mr-auto text-xs text-muted-foreground">{tChat("thinking")}</p>
         )}
         {status === "error" && (
           <p className="mr-auto text-xs text-destructive">
-            Something went wrong. Please try again.
+            {tChat("error")}
           </p>
         )}
       </div>
@@ -68,7 +70,7 @@ export default function ChatPage() {
         <Input
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="Ask anything…"
+          placeholder={tChat("placeholder")}
           className="flex-1"
           disabled={status !== "ready"}
         />

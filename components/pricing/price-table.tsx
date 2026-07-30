@@ -32,7 +32,7 @@ const plans: Plan[] = [
     price: "₾0",
     unitKey: "monthly",
     icon: <Library className="h-5 w-5" />,
-    href: "/register",
+    href: "/problems",
   },
   {
     key: "ai",
@@ -54,6 +54,7 @@ const plans: Plan[] = [
 
 export function PriceTable() {
   const t = useTranslations("pricing");
+  const ts = useTranslations("subscription");
   const { data: session } = useSession();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -64,10 +65,10 @@ export function PriceTable() {
     try {
       const res = await fetch("/api/payments/flitt/checkout", { method: "POST" });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? "Failed to start checkout");
+      if (!res.ok) throw new Error(data.error ?? ts("checkoutFailed"));
       window.location.href = data.checkoutUrl;
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Something went wrong");
+      setError(e instanceof Error ? e.message : ts("genericError"));
       setLoading(false);
     }
   }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -83,13 +84,21 @@ const DIFF_COLOR: Record<string, string> = {
 };
 
 const METRIC_TILES = [
-  { key: "totalUsers" as const, label: "Total Users", icon: Users },
-  { key: "totalTutors" as const, label: "Tutors", icon: GraduationCap },
-  { key: "pendingProblems" as const, label: "Pending Problems", icon: FileText },
-  { key: "totalProblems" as const, label: "Total Problems", icon: BarChart3 },
+  { key: "totalUsers" as const, labelKey: "metricTotalUsers" as const, icon: Users },
+  { key: "totalTutors" as const, labelKey: "metricTutors" as const, icon: GraduationCap },
+  { key: "pendingProblems" as const, labelKey: "metricPendingProblems" as const, icon: FileText },
+  { key: "totalProblems" as const, labelKey: "metricTotalProblems" as const, icon: BarChart3 },
 ];
 
 export default function AdminPage() {
+  const t = useTranslations("admin");
+  const tAuth = useTranslations("auth");
+  const tc = useTranslations("common");
+  const roleLabel = {
+    student: tAuth("roleStudent"),
+    tutor: tAuth("roleTutor"),
+    admin: tAuth("roleAdmin"),
+  } as const;
   const [users, setUsers] = useState<User[]>([]);
   const [problems, setProblems] = useState<Problem[]>([]);
   const [tutors, setTutors] = useState<TutorWithProfile[]>([]);
@@ -129,9 +138,9 @@ export default function AdminPage() {
       const res = await fetch("/api/admin/images");
       const data = await res.json();
       if (res.ok) setImages(data.images);
-      else toast.error(data.error ?? "Failed to load images");
+      else toast.error(data.error ?? t("toastImagesLoadFailed"));
     } catch {
-      toast.error("Failed to load images");
+      toast.error(t("toastImagesLoadFailed"));
     } finally {
       setImagesLoading(false);
     }
@@ -159,7 +168,7 @@ export default function AdminPage() {
   }
 
   async function deleteUser(userId: string) {
-    if (!confirm("Permanently delete this user?")) return;
+    if (!confirm(t("confirmDeleteUser"))) return;
     await fetch(`/api/admin/users/${userId}`, { method: "DELETE" });
     refresh();
   }
@@ -193,12 +202,12 @@ export default function AdminPage() {
       });
       if (res.ok) {
         setImages((prev) => prev.filter((img) => img.public_id !== publicId));
-        toast.success("Image deleted");
+        toast.success(t("toastImageDeleted"));
       } else {
-        toast.error("Delete failed");
+        toast.error(t("toastDeleteFailed"));
       }
     } catch {
-      toast.error("Delete failed");
+      toast.error(t("toastDeleteFailed"));
     }
   }
 
@@ -206,35 +215,35 @@ export default function AdminPage() {
     <div className="container max-w-7xl space-y-8 py-10">
       <header className="space-y-2">
         <div className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-background/60 px-3 py-1 font-mono text-xs font-semibold uppercase tracking-wide text-primary backdrop-blur">
-          Gradebook
+          {t("eyebrow")}
         </div>
         <h1 className="text-balance font-serif text-3xl font-bold tracking-tight md:text-4xl">
-          <span className="text-gradient-cool">Admin Panel</span>
+          <span className="text-gradient-cool">{t("title")}</span>
         </h1>
         <p className="text-sm text-muted-foreground">
-          Manage users, tutors, problems, and platform health.
+          {t("subtitle")}
         </p>
       </header>
 
       <Tabs defaultValue="metrics">
         <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="metrics" className="flex items-center gap-1.5">
-            <BarChart3 className="h-4 w-4" /> Metrics
+            <BarChart3 className="h-4 w-4" /> {t("tabMetrics")}
           </TabsTrigger>
           <TabsTrigger value="users" className="flex items-center gap-1.5">
-            <Users className="h-4 w-4" /> Users
+            <Users className="h-4 w-4" /> {t("tabUsers")}
             {users.length > 0 && (
               <span className="ml-0.5 rounded-full bg-muted px-1.5 py-0 text-xs">{users.length}</span>
             )}
           </TabsTrigger>
           <TabsTrigger value="tutors" className="flex items-center gap-1.5">
-            <GraduationCap className="h-4 w-4" /> Tutors
+            <GraduationCap className="h-4 w-4" /> {t("tabTutors")}
             {tutors.length > 0 && (
               <span className="ml-0.5 rounded-full bg-muted px-1.5 py-0 text-xs">{tutors.length}</span>
             )}
           </TabsTrigger>
           <TabsTrigger value="problems" className="flex items-center gap-1.5">
-            <FileText className="h-4 w-4" /> Problems
+            <FileText className="h-4 w-4" /> {t("tabProblems")}
             {problems.length > 0 && (
               <span className="ml-0.5 rounded-full bg-destructive/80 px-1.5 py-0 text-xs text-destructive-foreground">
                 {problems.length}
@@ -242,14 +251,14 @@ export default function AdminPage() {
             )}
           </TabsTrigger>
           <TabsTrigger value="images" className="flex items-center gap-1.5">
-            <ImagesIcon className="h-4 w-4" /> Images
+            <ImagesIcon className="h-4 w-4" /> {t("tabImages")}
           </TabsTrigger>
         </TabsList>
 
         {/* METRICS */}
         <TabsContent value="metrics" className="mt-6">
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {METRIC_TILES.map(({ key, label, icon: Icon }) => (
+            {METRIC_TILES.map(({ key, labelKey, icon: Icon }) => (
               <Card key={key}>
                 <CardContent className="flex items-center gap-4 p-5">
                   <div className="grid h-11 w-11 shrink-0 place-items-center rounded-lg bg-gradient-to-br from-teal-500/15 to-emerald-500/15 text-primary ring-1 ring-inset ring-teal-500/20">
@@ -257,7 +266,7 @@ export default function AdminPage() {
                   </div>
                   <div>
                     <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
-                      {label}
+                      {t(labelKey)}
                     </p>
                     <p className="text-2xl font-bold text-foreground">{metrics?.[key] ?? "—"}</p>
                   </div>
@@ -271,18 +280,18 @@ export default function AdminPage() {
         <TabsContent value="users" className="mt-6">
           <Card>
             <CardHeader>
-              <CardTitle className="font-serif">All Users ({users.length})</CardTitle>
+              <CardTitle className="font-serif">{t("usersTitle")} ({users.length})</CardTitle>
             </CardHeader>
             <CardContent className="p-0">
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b border-dashed border-border text-left font-mono text-xs uppercase tracking-wide text-muted-foreground">
-                      <th className="px-4 py-3">Name</th>
-                      <th className="px-4 py-3">Email</th>
-                      <th className="px-4 py-3">Role</th>
-                      <th className="px-4 py-3">Joined</th>
-                      <th className="px-4 py-3">Actions</th>
+                      <th className="px-4 py-3">{t("colName")}</th>
+                      <th className="px-4 py-3">{t("colEmail")}</th>
+                      <th className="px-4 py-3">{t("colRole")}</th>
+                      <th className="px-4 py-3">{t("colJoined")}</th>
+                      <th className="px-4 py-3">{t("colActions")}</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-dashed divide-border">
@@ -291,7 +300,7 @@ export default function AdminPage() {
                         <td className="px-4 py-3 font-medium">{u.name}</td>
                         <td className="px-4 py-3 text-muted-foreground">{u.email}</td>
                         <td className="px-4 py-3">
-                          <Badge variant={ROLE_BADGE[u.role] ?? "secondary"}>{u.role}</Badge>
+                          <Badge variant={ROLE_BADGE[u.role] ?? "secondary"}>{roleLabel[u.role]}</Badge>
                         </td>
                         <td className="px-4 py-3 text-muted-foreground">
                           {new Date(u.createdAt).toLocaleDateString()}
@@ -308,7 +317,7 @@ export default function AdminPage() {
                                   className="h-7 text-xs"
                                   onClick={() => changeRole(u._id, r)}
                                 >
-                                  {String.fromCharCode(8594)} {r}
+                                  {String.fromCharCode(8594)} {roleLabel[r]}
                                 </Button>
                               ))}
                             <Button
@@ -326,7 +335,7 @@ export default function AdminPage() {
                   </tbody>
                 </table>
                 {users.length === 0 && (
-                  <p className="py-10 text-center text-muted-foreground">No users found.</p>
+                  <p className="py-10 text-center text-muted-foreground">{t("noUsers")}</p>
                 )}
               </div>
             </CardContent>
@@ -337,127 +346,127 @@ export default function AdminPage() {
         <TabsContent value="tutors" className="mt-6">
           <Card>
             <CardHeader>
-              <CardTitle className="font-serif">Tutors ({tutors.length})</CardTitle>
+              <CardTitle className="font-serif">{t("tutorsTitle")} ({tutors.length})</CardTitle>
             </CardHeader>
             <CardContent className="p-0">
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b border-dashed border-border text-left font-mono text-xs uppercase tracking-wide text-muted-foreground">
-                      <th className="px-4 py-3">Name</th>
-                      <th className="px-4 py-3">Email</th>
-                      <th className="px-4 py-3">Status</th>
-                      <th className="px-4 py-3">Subjects</th>
-                      <th className="px-4 py-3">Experience</th>
-                      <th className="px-4 py-3">Rate (GEL)</th>
-                      <th className="px-4 py-3">Actions</th>
+                      <th className="px-4 py-3">{t("colName")}</th>
+                      <th className="px-4 py-3">{t("colEmail")}</th>
+                      <th className="px-4 py-3">{t("colStatus")}</th>
+                      <th className="px-4 py-3">{t("colSubjects")}</th>
+                      <th className="px-4 py-3">{t("colExperience")}</th>
+                      <th className="px-4 py-3">{t("colRate")}</th>
+                      <th className="px-4 py-3">{t("colActions")}</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-dashed divide-border">
-                    {tutors.map((t) => {
-                      const rejected = !t.profile?.approved && !!t.profile?.rejectionReason;
+                    {tutors.map((tutor) => {
+                      const rejected = !tutor.profile?.approved && !!tutor.profile?.rejectionReason;
                       return (
-                        <tr key={t._id} className="align-top transition-colors hover:bg-muted/30">
-                          <td className="px-4 py-3 font-medium">{t.name}</td>
-                          <td className="px-4 py-3 text-muted-foreground">{t.email}</td>
+                        <tr key={tutor._id} className="align-top transition-colors hover:bg-muted/30">
+                          <td className="px-4 py-3 font-medium">{tutor.name}</td>
+                          <td className="px-4 py-3 text-muted-foreground">{tutor.email}</td>
                           <td className="px-4 py-3">
-                            {t.profile ? (
+                            {tutor.profile ? (
                               <div className="space-y-1">
                                 <Badge
                                   variant={
-                                    t.profile.approved
+                                    tutor.profile.approved
                                       ? "cool"
                                       : rejected
                                         ? "destructive"
                                         : "secondary"
                                   }
                                 >
-                                  {t.profile.approved
-                                    ? "Approved"
+                                  {tutor.profile.approved
+                                    ? t("statusApproved")
                                     : rejected
-                                      ? "Rejected"
-                                      : "Pending"}
+                                      ? t("statusRejected")
+                                      : t("statusPending")}
                                 </Badge>
                                 {rejected && (
                                   <p className="max-w-[180px] text-[11px] text-destructive">
-                                    {t.profile.rejectionReason}
+                                    {tutor.profile.rejectionReason}
                                   </p>
                                 )}
                               </div>
                             ) : (
-                              <Badge variant="outline">No profile</Badge>
+                              <Badge variant="outline">{t("noProfile")}</Badge>
                             )}
                           </td>
                           <td className="px-4 py-3 text-muted-foreground">
-                            {t.profile?.subjects.join(", ") || "—"}
+                            {tutor.profile?.subjects.join(", ") || "—"}
                           </td>
                           <td
                             className="max-w-[220px] px-4 py-3 text-muted-foreground"
-                            title={t.profile?.experience}
+                            title={tutor.profile?.experience}
                           >
-                            {t.profile?.yearsExperience !== undefined && (
+                            {tutor.profile?.yearsExperience !== undefined && (
                               <p className="text-xs font-medium text-foreground">
-                                {t.profile.yearsExperience} yrs
+                                {tutor.profile.yearsExperience} {t("years")}
                               </p>
                             )}
-                            {t.profile?.experience && (
-                              <p className="line-clamp-2 text-[11px]">{t.profile.experience}</p>
+                            {tutor.profile?.experience && (
+                              <p className="line-clamp-2 text-[11px]">{tutor.profile.experience}</p>
                             )}
                           </td>
                           <td className="px-4 py-3 text-muted-foreground">
-                            {t.profile?.hourlyRateGEL ?? "—"}
+                            {tutor.profile?.hourlyRateGEL ?? "—"}
                           </td>
                           <td className="px-4 py-3">
                             <div className="flex flex-col items-start gap-1.5">
                               <div className="flex items-center gap-1">
-                                {t.profile && !t.profile.approved && (
+                                {tutor.profile && !tutor.profile.approved && (
                                   <Button
                                     size="sm"
                                     variant="outline"
                                     className="h-7 rounded-md border-dashed border-emerald-500/50 font-mono text-[11px] uppercase tracking-wide text-emerald-600 hover:bg-emerald-500/10 dark:text-emerald-400"
-                                    onClick={() => setTutorProfileApproved(t._id, true)}
+                                    onClick={() => setTutorProfileApproved(tutor._id, true)}
                                   >
-                                    <CheckCircle className="mr-1 h-3 w-3" /> Approve
+                                    <CheckCircle className="mr-1 h-3 w-3" /> {t("approve")}
                                   </Button>
                                 )}
-                                {t.profile && !t.profile.approved && (
+                                {tutor.profile && !tutor.profile.approved && (
                                   <Button
                                     size="sm"
                                     variant="outline"
                                     className="h-7 rounded-md border-dashed border-destructive/50 font-mono text-[11px] uppercase tracking-wide text-destructive hover:bg-destructive/10"
-                                    onClick={() => setTutorProfileApproved(t._id, false)}
+                                    onClick={() => setTutorProfileApproved(tutor._id, false)}
                                   >
-                                    <XCircle className="mr-1 h-3 w-3" /> Reject
+                                    <XCircle className="mr-1 h-3 w-3" /> {t("reject")}
                                   </Button>
                                 )}
-                                {t.profile?.approved && (
+                                {tutor.profile?.approved && (
                                   <Button
                                     size="sm"
                                     variant="outline"
                                     className="h-7 rounded-md border-dashed border-destructive/50 font-mono text-[11px] uppercase tracking-wide text-destructive hover:bg-destructive/10"
-                                    onClick={() => setTutorProfileApproved(t._id, false)}
+                                    onClick={() => setTutorProfileApproved(tutor._id, false)}
                                   >
-                                    <XCircle className="mr-1 h-3 w-3" /> Revoke
+                                    <XCircle className="mr-1 h-3 w-3" /> {t("revoke")}
                                   </Button>
                                 )}
                                 <Button
                                   size="sm"
                                   variant="outline"
                                   className="h-7 text-xs"
-                                  onClick={() => changeRole(t._id, "student")}
+                                  onClick={() => changeRole(tutor._id, "student")}
                                 >
-                                  {String.fromCharCode(8594)} student
+                                  {String.fromCharCode(8594)} {t("demoteToStudent")}
                                 </Button>
                               </div>
-                              {t.profile && !t.profile.approved && (
+                              {tutor.profile && !tutor.profile.approved && (
                                 <Input
-                                  placeholder="Rejection reason (optional)"
+                                  placeholder={t("rejectionReasonPlaceholder")}
                                   className="h-7 w-48 text-[11px]"
-                                  value={tutorRejectionReason[t._id] ?? ""}
+                                  value={tutorRejectionReason[tutor._id] ?? ""}
                                   onChange={(e) =>
                                     setTutorRejectionReason((prev) => ({
                                       ...prev,
-                                      [t._id]: e.target.value,
+                                      [tutor._id]: e.target.value,
                                     }))
                                   }
                                 />
@@ -470,7 +479,7 @@ export default function AdminPage() {
                   </tbody>
                 </table>
                 {tutors.length === 0 && (
-                  <p className="py-10 text-center text-muted-foreground">No tutors yet.</p>
+                  <p className="py-10 text-center text-muted-foreground">{t("noTutors")}</p>
                 )}
               </div>
             </CardContent>
@@ -481,7 +490,7 @@ export default function AdminPage() {
         <TabsContent value="problems" className="mt-6">
           <Card>
             <CardHeader>
-              <CardTitle className="font-serif">Pending Problems ({problems.length})</CardTitle>
+              <CardTitle className="font-serif">{t("pendingProblemsTitle")} ({problems.length})</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
@@ -500,17 +509,23 @@ export default function AdminPage() {
                           {p.bookSlug}
                         </Badge>
                         <span className={`text-xs font-medium ${DIFF_COLOR[p.difficulty]}`}>
-                          {p.difficulty}
+                          {p.difficulty === "easy"
+                            ? tc("difficultyEasy")
+                            : p.difficulty === "medium"
+                              ? tc("difficultyMedium")
+                              : tc("difficultyHard")}
                         </span>
                         {p.authorName && (
-                          <span className="text-xs text-muted-foreground">by {p.authorName}</span>
+                          <span className="text-xs text-muted-foreground">
+                            {t("by")} {p.authorName}
+                          </span>
                         )}
                       </div>
                       <p className="line-clamp-3 text-sm text-muted-foreground">{p.statementKa}</p>
                     </div>
                     <div className="flex items-center gap-2">
                       <Input
-                        placeholder="Rejection reason (optional)"
+                        placeholder={t("rejectionReasonPlaceholder")}
                         className="h-8 text-xs"
                         value={rejectionReason[p._id] ?? ""}
                         onChange={(e) =>
@@ -522,20 +537,20 @@ export default function AdminPage() {
                         className="h-8 shrink-0 rounded-md border-2 border-dashed border-emerald-600 bg-transparent font-mono text-xs uppercase tracking-wide text-emerald-600 hover:bg-emerald-500/10 dark:text-emerald-400"
                         onClick={() => reviewProblem(p._id, "approved")}
                       >
-                        <CheckCircle className="mr-1 h-3 w-3" /> Approve
+                        <CheckCircle className="mr-1 h-3 w-3" /> {t("approve")}
                       </Button>
                       <Button
                         size="sm"
                         className="h-8 shrink-0 rounded-md border-2 border-dashed border-destructive bg-transparent font-mono text-xs uppercase tracking-wide text-destructive hover:bg-destructive/10"
                         onClick={() => reviewProblem(p._id, "rejected")}
                       >
-                        <XCircle className="mr-1 h-3 w-3" /> Reject
+                        <XCircle className="mr-1 h-3 w-3" /> {t("reject")}
                       </Button>
                     </div>
                   </div>
                 ))}
                 {problems.length === 0 && (
-                  <p className="py-8 text-center text-muted-foreground">No pending problems.</p>
+                  <p className="py-8 text-center text-muted-foreground">{t("noPendingProblems")}</p>
                 )}
               </div>
             </CardContent>
@@ -546,17 +561,17 @@ export default function AdminPage() {
         <TabsContent value="images" className="mt-6">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0">
-              <CardTitle className="font-serif">Uploaded Images ({images.length})</CardTitle>
+              <CardTitle className="font-serif">{t("imagesTitle")} ({images.length})</CardTitle>
               <Button variant="outline" size="sm" onClick={loadImages} disabled={imagesLoading}>
                 <RefreshCw className={cn("h-4 w-4", imagesLoading && "animate-spin")} />
-                Refresh
+                {t("refresh")}
               </Button>
             </CardHeader>
             <CardContent>
               {imagesLoading ? (
-                <p className="text-muted-foreground">Loading…</p>
+                <p className="text-muted-foreground">{t("loadingImages")}</p>
               ) : images.length === 0 ? (
-                <p className="py-8 text-center text-muted-foreground">No images uploaded yet.</p>
+                <p className="py-8 text-center text-muted-foreground">{t("noImages")}</p>
               ) : (
                 <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
                   {images.map((img) => (

@@ -5,6 +5,7 @@ import { Link } from "@/i18n/routing";
 export function Footer() {
   const t = useTranslations("brand");
   const tn = useTranslations("nav");
+  const tf = useTranslations("footer");
 
   const exploreLinks = [
     { href: "/problems", label: tn("problems") },
@@ -26,7 +27,7 @@ export function Footer() {
         </div>
         <div className="space-y-2 sm:justify-self-end">
           <p className="font-mono text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-            Explore
+            {tf("explore")}
           </p>
           <nav className="flex flex-col gap-1.5 text-sm">
             {exploreLinks.map((l) => (
@@ -44,7 +45,7 @@ export function Footer() {
       <div className="border-t border-dashed border-border/60">
         <div className="container py-4">
           <p className="text-xs text-muted-foreground">
-            © {new Date().getFullYear()} Math Guide. All rights reserved.
+            {tf("rights", { year: new Date().getFullYear() })}
           </p>
         </div>
       </div>

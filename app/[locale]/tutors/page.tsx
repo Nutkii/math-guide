@@ -1,10 +1,11 @@
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import { PageHero } from "@/components/layout/page-hero";
 import { TutorSubjectFilter } from "@/components/tutor/tutor-subject-filter";
-import { tutors } from "@/lib/mock-data";
+import { getTutorsDB } from "@/lib/db-data";
 
-export default function TutorsPage() {
-  const t = useTranslations("tutors");
+export default async function TutorsPage() {
+  const t = await getTranslations("tutors");
+  const tutors = await getTutorsDB();
 
   return (
     <div className="container py-12">
